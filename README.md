@@ -1,6 +1,6 @@
 # Kill-Team
 
-https://raw.githubusercontent.com/RosterizerTestData/Kill-Team/main/Kill-Team.manifest
+https://raw.githubusercontent.com/RosterizerTestData/Kill-Team/main/Kill-Team.rulebook
 
 TODO:
 

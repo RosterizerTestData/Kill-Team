@@ -1,6 +1,7 @@
-{
+
+let rulebook = {
   "name": "Warhammer 40,000: Kill Team (2021)",
-  "revision": "0.1.2",
+  "revision": "0.1.1",
   "game": "",
   "genre": "sci-fi",
   "publisher": "Games Workshop",
@@ -8,37 +9,32 @@
   "notes": "This data was translated automatically from a battlescribe catalog. Only asset names and bare stats have been translated and considerable editing is required in order for it to become useful in Rosterizer.",
   "wip": true,
   "dependencies": [],
-  "manifest": {
+  "rulebook": {
     "assetTaxonomy": {
       "Abilities": {},
       "Acts of Faith": {},
       "Allegory": {},
       "Battle Honour": {
         "aspects": {
+          "Unique": true,
           "Lock Qty": true,
-          "Rename": true,
-          "Unique": true
+          "Rename": true
         }
       },
       "Battle Scar": {
-        "aspects": {
-          "Lock Qty": true,
-          "Rename": true,
-          "Unique": true
-        },
         "keywords": {
           "Tags": [
             "-"
           ]
+        },
+        "aspects": {
+          "Unique": true,
+          "Lock Qty": true,
+          "Rename": true
         }
       },
       "Boon of Tzeentch": {},
       "Dataslate": {
-        "allowed": {
-          "classifications": [
-            "Operative"
-          ]
-        },
         "assets": {
           "traits": [
             "Stash§Stash",
@@ -46,43 +42,16 @@
             "Requisitions§Requisitions"
           ]
         },
+        "rules": {},
         "constraints": {
-          "any": []
+          "any": [
+            ""
+          ]
         },
-        "rules": {
-          "hideEnclosedAssets": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "assets",
-                    "templateClass",
-                    "Operative",
-                    "aspects",
-                    "Visibility"
-                  ],
-                  [
-                    "{self}",
-                    "assets",
-                    "classification",
-                    [
-                      "Stash",
-                      "Requisitions",
-                      "Strategic Assets"
-                    ],
-                    "aspects",
-                    "Visibility"
-                  ]
-                ],
-                "value": "active"
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "pass"
-          }
+        "allowed": {
+          "classifications": [
+            "Operative"
+          ]
         }
       },
       "Doctrina Imperatives": {},
@@ -101,178 +70,6 @@
         },
         "aspects": {
           "Lock Qty": true
-        },
-        "rules": {
-          "setQtyForAuto": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "note": "Set the modified quantity on the auto-includes",
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "item",
-                    "{0string}",
-                    "quantity"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "rules",
-                  "setQtyForAuto",
-                  "evals",
-                  "2",
-                  "result",
-                  "integer"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "note": "Allow the trait asset to be included",
-                "paths": [
-                  [
-                    "{self}",
-                    "allowed",
-                    "items"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "modelToTrack",
-                  "value"
-                ]
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "note": "Storing the itemKey of the model we want to track",
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "modelToTrack",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": false,
-                "not": false,
-                "note": "Get quantity of unmodified models",
-                "operator": "SUM",
-                "paths": [
-                  [
-                    "{self}",
-                    "included",
-                    "templateClass",
-                    "Operative",
-                    "quantity"
-                  ]
-                ]
-              },
-              {
-                "actionable": false,
-                "equation": {
-                  "operator": "T-O",
-                  "value": [
-                    "{self}",
-                    "rules",
-                    "setQtyForAuto",
-                    "evals",
-                    "1",
-                    "result",
-                    "integer"
-                  ]
-                },
-                "not": false,
-                "note": "Determine new qty of trait",
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "item",
-                    "{0string}",
-                    "quantity"
-                  ]
-                ]
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "pass",
-            "order": 21
-          },
-          "This fire team has auto-added operatives, but for narrative play, you must add operatives from your Dataslate.": {
-            "evals": [
-              {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "modelToTrack",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              },
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "SUM",
-                "paths": [
-                  [
-                    "{self}",
-                    "included",
-                    "templateClass",
-                    "Operative",
-                    "quantity"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "traits",
-                  "item",
-                  "{0string}",
-                  "quantity"
-                ]
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "warning",
-            "order": 20
-          }
-        },
-        "stats": {
-          "modelToTrack": {
-            "dynamic": false,
-            "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "hidden"
-          }
         }
       },
       "Kill Team": {
@@ -289,49 +86,16 @@
           ]
         },
         "stats": {
-          "Arco-Flagellant Fire Team": {
-            "dynamic": false,
-            "max": 1,
-            "statType": "numeric",
-            "tracked": false,
-            "value": 0,
-            "visibility": "hidden"
-          },
           "Fire Team": {
-            "dynamic": false,
             "statType": "numeric",
-            "tracked": true,
             "value": 0,
-            "visibility": "hidden"
+            "visibility": "hidden",
+            "dynamic": false,
+            "tracked": true
           }
         }
       },
       "Mark of Chaos": {},
-      "Matched Roster": {
-        "rules": {
-          "hideEnclosedOperatives": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "assets",
-                    "templateClass",
-                    "Operative",
-                    "aspects",
-                    "Visibility"
-                  ]
-                ],
-                "value": "active"
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "pass"
-          }
-        }
-      },
       "Melee weapon": {},
       "Melee Weapons Rare Equipment": {
         "stats": {
@@ -343,583 +107,163 @@
         }
       },
       "Operative": {
-        "allowed": {
-          "classifications": []
-        },
-        "aspects": {
-          "Group Includes": true,
-          "Group Traits": false,
-          "Order Includes A–Z": true,
-          "Order Traits A–Z": false,
-          "Type": "game piece"
+        "stats": {
+          "Rank": {
+            "statType": "rank",
+            "value": "Adept",
+            "ranks": {
+              "Adept": {
+                "order": 0
+              },
+              "Veteran": {
+                "order": 1,
+                "tracking": {}
+              },
+              "Ace": {
+                "order": 2,
+                "tracking": {}
+              },
+              "Grizzled": {
+                "order": 3,
+                "tracking": {}
+              },
+              "Revered": {
+                "order": 4,
+                "tracking": {}
+              }
+            },
+            "group": "Spec. Ops",
+            "groupOrder": 1,
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "Experience": {
+            "statType": "numeric",
+            "increment": {
+              "value": 1
+            },
+            "value": 0,
+            "group": "Spec. Ops",
+            "groupOrder": 1,
+            "visibility": "active",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Rested": {
+            "statType": "numeric",
+            "value": 0,
+            "group": "Spec. Ops",
+            "groupOrder": 1,
+            "visibility": "active",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Weapons": {
+            "statType": "rank",
+            "group": "Selections",
+            "groupOrder": 1,
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "Battle Honour": {
+            "statType": "numeric",
+            "value": 0,
+            "statOrder": 4,
+            "group": "Spec. Ops",
+            "groupOrder": 1,
+            "visibility": "active",
+            "dynamic": false,
+            "tracked": true
+          },
+          "Specialism": {
+            "statType": "rank",
+            "value": null,
+            "group": "Spec. Ops",
+            "groupOrder": 1,
+            "visibility": "hidden",
+            "dynamic": true,
+            "tracked": false
+          },
+          "M": {
+            "statType": "term",
+            "value": null,
+            "statOrder": 1,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "APL": {
+            "statType": "numeric",
+            "value": null,
+            "statOrder": 2,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "GA": {
+            "statType": "numeric",
+            "value": null,
+            "statOrder": 3,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "SV": {
+            "statType": "numeric",
+            "format": "{v}+",
+            "value": null,
+            "statOrder": 5,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "DF": {
+            "statType": "numeric",
+            "value": null,
+            "statOrder": 4,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": false
+          },
+          "W": {
+            "statType": "numeric",
+            "value": null,
+            "statOrder": 6,
+            "group": "Profile",
+            "visibility": "normal",
+            "dynamic": false,
+            "tracked": true
+          }
         },
         "rules": {
-          "allowBattleHonours": {
-            "actions": [
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "allowed",
-                    "classifications"
-                  ]
-                ],
-                "value": "Battle Honour"
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Specialism",
-                  "value"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{roster}",
-                  "stats",
-                  "Imperium Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{roster}",
-                  "stats",
-                  "Chaos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{roster}",
-                  "stats",
-                  "Aeldari Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{roster}",
-                  "stats",
-                  "Xenos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "min": 6,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
-          "allowNarrativeIncludes": {
-            "actions": [
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "allowed",
-                    "classifications"
-                  ]
-                ],
-                "value": "Equipment"
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "allowed",
-                    "classifications"
-                  ]
-                ],
-                "value": "Battle Scar"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
-          "Only one leader per kill team.": {
-            "evals": [
-              {
-                "actionable": true,
-                "max": 1,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "tally",
-                    "Leader"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "contains": true,
-                "not": true,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "keywords",
-                    "Keywords"
-                  ]
-                ],
-                "value": "Leader"
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "error"
-          },
-          "rank1": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Rank",
-                    "value"
-                  ]
-                ],
-                "value": "Veteran"
-              },
-              {
-                "actionType": "modify",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Battle Honour",
-                    "max"
-                  ]
-                ],
-                "value": 1
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "max": 15,
-                "min": 6,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 10
-          },
-          "rank2": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Rank",
-                    "value"
-                  ]
-                ],
-                "value": "Ace"
-              },
-              {
-                "actionType": "modify",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Battle Honour",
-                    "max"
-                  ]
-                ],
-                "value": 2
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "max": 30,
-                "min": 16,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 10
-          },
-          "rank3": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Rank",
-                    "value"
-                  ]
-                ],
-                "value": "Grizzled"
-              },
-              {
-                "actionType": "modify",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Battle Honour",
-                    "max"
-                  ]
-                ],
-                "value": 3
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "max": 50,
-                "min": 31,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 10
-          },
-          "rank4": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Rank",
-                    "value"
-                  ]
-                ],
-                "value": "Revered"
-              },
-              {
-                "actionType": "modify",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Battle Honour",
-                    "max"
-                  ]
-                ],
-                "value": 4
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "min": 51,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 10
-          },
-          "Select this operative’s specialism.": {
-            "evals": [
-              {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              },
-              {
-                "actionable": true,
-                "max": 5,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              },
-              {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Specialism",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "warning"
-          },
-          "specialismVisibility": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Specialism",
-                    "visibility"
-                  ]
-                ],
-                "value": "active"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{roster}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Narrative"
-              },
-              {
-                "actionable": true,
-                "min": 6,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Experience",
-                    "value"
-                  ]
-                ]
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
           "specOpsStats": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": true,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
             "actions": [
               {
-                "actionType": "set",
-                "iterations": 1,
                 "paths": [
                   [
                     "{self}",
@@ -933,14 +277,15 @@
                     "visibility"
                   ]
                 ],
-                "value": "hidden"
+                "actionType": "set",
+                "value": "hidden",
+                "iterations": 1
               }
-            ],
+            ]
+          },
+          "specialismVisibility": {
             "evals": [
               {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
                 "paths": [
                   [
                     "{roster}",
@@ -949,18 +294,129 @@
                     "value"
                   ]
                 ],
-                "value": "Narrative"
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "min": 6,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
               }
             ],
+            "failState": "pass",
             "evaluate": "AND",
-            "failState": "pass"
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Specialism",
+                    "visibility"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "active",
+                "iterations": 1
+              }
+            ]
+          },
+          "allowBattleScars": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "allowed",
+                    "classifications"
+                  ]
+                ],
+                "actionType": "add",
+                "value": "Battle Scar",
+                "iterations": 1
+              }
+            ]
+          },
+          "Select this operative’s specialism.": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": true,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "max": 5,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Specialism",
+                    "value"
+                  ]
+                ],
+                "value": "-",
+                "operator": "AND",
+                "not": true,
+                "actionable": true
+              }
+            ],
+            "failState": "warning",
+            "evaluate": "OR"
           },
           "This operative has unspent traits.": {
             "evals": [
               {
-                "actionable": true,
-                "not": true,
-                "operator": "AND",
                 "paths": [
                   [
                     "{roster}",
@@ -969,18 +425,12 @@
                     "value"
                   ]
                 ],
-                "value": "Narrative"
+                "value": "Narrative",
+                "operator": "AND",
+                "not": true,
+                "actionable": true
               },
               {
-                "actionable": true,
-                "min": [
-                  "{self}",
-                  "stats",
-                  "Battle Honour",
-                  "max"
-                ],
-                "not": false,
-                "operator": "AND",
                 "paths": [
                   [
                     "{self}",
@@ -988,147 +438,449 @@
                     "Battle Honour",
                     "value"
                   ]
-                ]
+                ],
+                "min": [
+                  "{self}",
+                  "stats",
+                  "Battle Honour",
+                  "max"
+                ],
+                "operator": "AND",
+                "not": false,
+                "actionable": true
               }
             ],
-            "evaluate": "OR",
-            "failState": "warning"
+            "failState": "warning",
+            "evaluate": "OR"
+          },
+          "rank1": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "max": 15,
+                "min": 6,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 10,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Rank",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "Veteran",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Battle Honour",
+                    "max"
+                  ]
+                ],
+                "actionType": "modify",
+                "value": 1,
+                "iterations": 1
+              }
+            ]
+          },
+          "rank2": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "max": 30,
+                "min": 16,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 10,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Rank",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "Ace",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Battle Honour",
+                    "max"
+                  ]
+                ],
+                "actionType": "modify",
+                "value": 2,
+                "iterations": 1
+              }
+            ]
+          },
+          "rank3": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "max": 50,
+                "min": 31,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 10,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Rank",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "Grizzled",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Battle Honour",
+                    "max"
+                  ]
+                ],
+                "actionType": "modify",
+                "value": 3,
+                "iterations": 1
+              }
+            ]
+          },
+          "rank4": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "min": 51,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 10,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Rank",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "Revered",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Battle Honour",
+                    "max"
+                  ]
+                ],
+                "actionType": "modify",
+                "value": 4,
+                "iterations": 1
+              }
+            ]
+          },
+          "allowBattleHonours": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Experience",
+                    "value"
+                  ]
+                ],
+                "min": 6,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "allowed",
+                    "classifications"
+                  ]
+                ],
+                "actionType": "add",
+                "value": "Battle Honour",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Specialism",
+                  "value"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{roster}",
+                  "stats",
+                  "Imperium Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{roster}",
+                  "stats",
+                  "Chaos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{roster}",
+                  "stats",
+                  "Aeldari Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{roster}",
+                  "stats",
+                  "Xenos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              }
+            ]
+          },
+          "Only one leader per kill team.": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{roster}",
+                    "traits",
+                    "classification",
+                    "Kill Team",
+                    "tally",
+                    "Leader"
+                  ]
+                ],
+                "max": 1,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "keywords",
+                    "Keywords"
+                  ]
+                ],
+                "value": "Leader",
+                "contains": true,
+                "operator": "AND",
+                "not": true,
+                "actionable": true
+              }
+            ],
+            "failState": "error",
+            "evaluate": "OR"
           }
         },
-        "stats": {
-          "APL": {
-            "dynamic": false,
-            "group": "Profile",
-            "statOrder": 2,
-            "statType": "numeric",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "Battle Honour": {
-            "dynamic": false,
-            "group": "Spec. Ops",
-            "groupOrder": 1,
-            "statOrder": 4,
-            "statType": "numeric",
-            "tracked": true,
-            "value": 0,
-            "visibility": "active"
-          },
-          "DF": {
-            "dynamic": false,
-            "group": "Profile",
-            "statOrder": 4,
-            "statType": "numeric",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "Experience": {
-            "dynamic": true,
-            "group": "Spec. Ops",
-            "groupOrder": 1,
-            "increment": {
-              "value": 1
-            },
-            "statType": "numeric",
-            "tracked": false,
-            "value": 0,
-            "visibility": "active"
-          },
-          "GA": {
-            "dynamic": false,
-            "group": "Profile",
-            "statOrder": 3,
-            "statType": "numeric",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "M": {
-            "dynamic": false,
-            "group": "Profile",
-            "statOrder": 1,
-            "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "Rank": {
-            "dynamic": false,
-            "group": "Spec. Ops",
-            "groupOrder": 1,
-            "ranks": {
-              "Ace": {
-                "order": 2,
-                "tracking": {}
-              },
-              "Adept": {
-                "order": 0
-              },
-              "Grizzled": {
-                "order": 3,
-                "tracking": {}
-              },
-              "Revered": {
-                "order": 4,
-                "tracking": {}
-              },
-              "Veteran": {
-                "order": 1,
-                "tracking": {}
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "Adept",
-            "visibility": "normal"
-          },
-          "Rested": {
-            "dynamic": true,
-            "group": "Spec. Ops",
-            "groupOrder": 1,
-            "statType": "numeric",
-            "tracked": false,
-            "value": 0,
-            "visibility": "active"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "group": "Spec. Ops",
-            "groupOrder": 1,
-            "statType": "rank",
-            "tracked": false,
-            "value": null,
-            "visibility": "hidden"
-          },
-          "SV": {
-            "dynamic": false,
-            "format": "{v}+",
-            "group": "Profile",
-            "statOrder": 5,
-            "statType": "numeric",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "W": {
-            "dynamic": false,
-            "group": "Profile",
-            "statOrder": 6,
-            "statType": "numeric",
-            "tracked": true,
-            "value": null,
-            "visibility": "normal"
-          },
-          "Weapons": {
-            "dynamic": false,
-            "group": "Selections",
-            "groupOrder": 1,
-            "statType": "rank",
-            "tracked": false,
-            "visibility": "normal"
-          }
+        "allowed": {
+          "classifications": []
+        },
+        "aspects": {
+          "Group Traits": false,
+          "Order Traits A–Z": false,
+          "Group Includes": true,
+          "Order Includes A–Z": true,
+          "Type": "game piece"
         }
       },
       "Operative—Blooded": {
@@ -1288,67 +1040,47 @@
       "Weapons": {
         "stats": {
           "!": {
-            "dynamic": false,
-            "statOrder": 6,
             "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
+            "value": null
           },
           "A": {
-            "dynamic": false,
-            "statOrder": 1,
             "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
+            "value": null
           },
           "D": {
-            "dynamic": false,
-            "statOrder": 3,
             "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
-          },
-          "R": {
-            "dynamic": false,
-            "group": "Range",
-            "groupOrder": -1,
-            "ranks": {
-              "Melee": {
-                "icons": [
-                  "crossed-swords"
-                ],
-                "order": 0
-              },
-              "Ranged": {
-                "icons": [
-                  "crosshair"
-                ],
-                "order": 1
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": null,
-            "visibility": "always"
+            "value": null
           },
           "SR": {
-            "dynamic": false,
-            "statOrder": 5,
             "statType": "term",
-            "tracked": false,
-            "value": null,
-            "visibility": "normal"
+            "value": null
           },
           "WS/BS": {
-            "dynamic": false,
-            "statOrder": 2,
             "statType": "term",
-            "tracked": false,
+            "value": null
+          },
+          "R": {
+            "statType": "rank",
             "value": null,
-            "visibility": "normal"
+            "ranks": {
+              "Melee": {
+                "order": 0,
+                "icons": [
+                  "crossed-swords"
+                ]
+              },
+              "Ranged": {
+                "order": 1,
+                "icons": [
+                  "crosshair"
+                ]
+              }
+            },
+            "group": "Range",
+            "groupOrder": -1,
+            "visibility": "always",
+            "dynamic": false,
+            "tracked": false
           }
         }
       },
@@ -1428,7 +1160,8 @@
         "text": "Once per battle, when this operative is activated, you can use this ability. If you do so, until the end of its activation, you can ignore any or all modifiers to this operative’s APL and Movement characteristics."
       },
       "Abilities§Aeldari Raiders": {
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
+        "stats": {}
       },
       "Abilities§Aerial Tracking Augur": {
         "text": "Once per battle, after rolling off to determine initiative, this operative can use this ability. If it does so, you can re-roll your dice."
@@ -1440,7 +1173,8 @@
         "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, if this operative performed a Charge action, you can re-roll one of your attack dice."
       },
       "Abilities§All Is Dust": {
-        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation."
+        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation.",
+        "stats": {}
       },
       "Abilities§Arcane Robes": {
         "text": "Once per battle, when Critical Damage would be inflicted upon this operative, you can use this ability. If you do so, that attack dice inflicts Normal Damage instead."
@@ -1464,12 +1198,12 @@
         "text": "Each time this operative fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll any or all of your dice results of 1. If any of your re-rolled dice also result in 1, that operative suffers 1 mortal wound."
       },
       "Abilities§Automata": {
+        "text": "- Each time this operative is activated, you can ignore any or all modifiers to its APL.\n- This operative is not affected by the Stun critical hit rule.",
         "keywords": {
           "Tags": [
             "Rubric Marine"
           ]
-        },
-        "text": "- Each time this operative is activated, you can ignore any or all modifiers to its APL.\n- This operative is not affected by the Stun critical hit rule."
+        }
       },
       "Abilities§Auxiliary Grenade Launcher*": {
         "text": "Frag and krak grenades the operative is equipped with can be selected for use twice, instead of once. Each time the operative performs a Shoot action, if a frag or krak grenade is selected as the ranged weapon, an auxiliary grenade launcher can also be selected. If it is, for that action’s shooting attack(s), frag or krak grenades are treated as not having the Rng ⬟ and Indirect special rules."
@@ -1481,12 +1215,12 @@
         "text": "While a friendly DIRE AVENGER operative is Visible to and within ⬛ of this operative, when determining control of an objective marker, treat that friendly operative’s APL characteristic as being 1 higher. Note that is not a modifier."
       },
       "Abilities§Avian Mobility": {
+        "text": "- You can ignore any or all modifiers to this operative’s Movement characteristic.\n- Each time this operative climbs or drops, you can ignore the first vertical distance of ⬤ it travels for that climb or drop.",
         "keywords": {
           "Tags": [
             "Tzaangor"
           ]
-        },
-        "text": "- You can ignore any or all modifiers to this operative’s Movement characteristic.\n- Each time this operative climbs or drops, you can ignore the first vertical distance of ⬤ it travels for that climb or drop."
+        }
       },
       "Abilities§Bad-tempered": {
         "text": "Each time an enemy operative performs a Fight action, if this operative is a valid target, you can select this operative as the target instead. Each time an enemy operative finishes a Charge action within Engagement Range of another friendly FARSTALKER KINBAND operative within ⬛ of this operative, if this operative is not within Engagement Range of an enemy operative, this operative can perform a free Charge action, but must finish that move within Engagement Range of that enemy operative."
@@ -1516,7 +1250,8 @@
         "text": "Once per Turning Point, when a friendly BLOODED operative with a Blooded token is incapacitated within ⬟ of this operative, you can add that token to your pool. This has no effect if the operative is only treated as having a Blooded token."
       },
       "Abilities§Bolter Discipline": {
-        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks."
+        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks.",
+        "stats": {}
       },
       "Abilities§Boom Boy": {
         "text": "Each time this operative performs a Shoot action during its activation, in the Roll Attack Dice step of that action’s shooting attack, if it has not moved during that activation, you can re-roll any or all of your attack dice."
@@ -1525,12 +1260,12 @@
         "text": "If this operative is incapacitated, roll one D6: on a 3+, it makes a shooting attack using its dynamite."
       },
       "Abilities§Boon": {
+        "text": "This model gains one Boon of Tzeentch.",
         "keywords": {
           "Tags": [
             "Sorcerer"
           ]
-        },
-        "text": "This model gains one Boon of Tzeentch."
+        }
       },
       "Abilities§Brands of the Damned": {
         "text": "Once per battle, if this operative is in the kill zone, you can use a Tactical Ploy without spending any CPs; that Tactical Ploy must have the same <MARK OF CHAOS> selectable keyword as this operative."
@@ -1560,10 +1295,12 @@
         "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
       },
       "Abilities§Camo cloak": {
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
+        "stats": {}
       },
       "Abilities§Camouflage Field": {
-        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
+        "stats": {}
       },
       "Abilities§Canid": {
         "text": "This operative cannot perform mission actions and cannot be equipped with equipment (unless CANID operative is specified). Each time this operative is activated, it can ignore the first distance of ⬤ it travels for a climb, drop or traverse during that activation."
@@ -1605,7 +1342,8 @@
         "text": "This operative can perform a Charge action while it has a Conceal order. Each time after this operative fights in combat, it can perform a free Dash action, regardless of any other actions it has performed during this activation, and even if it is within Engagement Range of an enemy operative (but it cannot finish that move within Engagement Range of an enemy operative)."
       },
       "Abilities§Cryptek Actions": {
-        "text": "Cryptek actions are unique actions this operative can perform. When this operative is added to your roster or dataslate, it gain two Cryptek actions -  select them from those opposite. This operative cannot gain the same Cryptek action more than once, and cannot perform a Cryptek action it has not gained."
+        "text": "Cryptek actions are unique actions this operative can perform. When this operative is added to your roster or dataslate, it gain two Cryptek actions -  select them from those opposite. This operative cannot gain the same Cryptek action more than once, and cannot perform a Cryptek action it has not gained.",
+        "stats": {}
       },
       "Abilities§Crystal Shard": {
         "text": "Once per battle, when a shooting attack is made against this operative, at the start of the Roll Defence Dice step of that shooting attack, you can use this ability. If you do so, until the end of the Turning Point, this operative has a 3+ invulnerable save."
@@ -1614,7 +1352,8 @@
         "text": "Once per battle, when a shooting attack is made against this operative, in the Resolve Successful Saves step of that shooting attack, you can change one of your retained normal saves to a critical save."
       },
       "Abilities§Daemon": {
-        "text": "This operative has a 5+ invulnerable save."
+        "text": "This operative has a 5+ invulnerable save.",
+        "stats": {}
       },
       "Abilities§Daemonic": {
         "text": "This operative has a 5+ invulnerable save."
@@ -1635,7 +1374,8 @@
         "text": "If this operative is incapacitated, at the end of that activation, you gain 1CP."
       },
       "Abilities§Defence Tactics": {
-        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action."
+        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action.",
+        "stats": {}
       },
       "Abilities§Detonate": {
         "text": "Each time this operative makes a Shoot action using its remote mine, make a shooting attack against each operative within ⬛ of the centre of its Mine token with that weapon. When making those shooting attacks, each operative (friendly and enemy) within ⬛ is a valid target, but when determining if it is in Cover, treat this operative’s Mine token as the active operative. Then remove this operative’s Mine token. An operative cannot make a shooting attack with this weapon by performing an Overwatch action, or if its Mine token is not in the killzone."
@@ -1647,7 +1387,8 @@
         "text": "- Each time this operative performs the Combat Stimms action, the friendly operative selected gains D3+3 lost wounds (instead of 2D3).\n- After the battle, in the Update Dataslates step, if this operative was not incapacitated during the battle, you can re-roll two Casualty tests as a resutl of this MEDIC operative, rather than one."
       },
       "Abilities§Directive": {
-        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation."
+        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation.",
+        "stats": {}
       },
       "Abilities§Disciplinarian": {
         "text": "While a friendly VOIDSMAN operative is within 2⬤ of this operative, weapons that friendly operative is equipped with gain the Balanced special rule."
@@ -1656,7 +1397,8 @@
         "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, you can retain one normal save as a critical save."
       },
       "Abilities§Disgustingly Resilient": {
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured."
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured.",
+        "stats": {}
       },
       "Abilities§Disruption field": {
         "text": "This operative has a 4+ invulnerable save."
@@ -1668,7 +1410,8 @@
         "text": "In the Strategy phase of the first Turning Point, when it is your turn to use a Strategic Ploy or pass, you must select one Doctrina Imperative below to become active for your kill team instead. That Imperative is active until the end of the battle, or until you change it to a different Imperative, whichever comes first.\n\nIn the Strategy phase of a subsequent Turning Point, when it is your turn to use a Strategic Ploy or pass, you may select one different Imperative below to become active for your kill team instead. That Imperative is active until the end of the battle, or until you change it to a different Imperative, whichever comes first.\n\nEach Imperative has an Optimisation and a Deprecation effect. Ignore each Imperative’s  Deprecation effect during the first Turning Point that it is active for your kill team during the battle."
       },
       "Abilities§Dodge": {
-        "text": "This operative has a 5+ invulnerable save."
+        "text": "This operative has a 5+ invulnerable save.",
+        "stats": {}
       },
       "Abilities§Drone Scout": {
         "text": "During deployment, if this operative was selected for deployment, you can set up one friendly PATHFINDER DRONE operative with a Conceal order anywhere in the killzone that is wholly within ⬟ of your dropzone, more than ⬟ from enemy operatives and more than ⬛ from the enemy dropzone."
@@ -1689,7 +1432,8 @@
         "text": "Each time this operative makes a shooting attack, in the Roll Attack Dice step of that shooting attack, you can retain one of your attack dice results of 5+ that is a successful hit as a critical hit."
       },
       "Abilities§Ephemeral Daemon": {
-        "text": "This operative has a 6+ invulnerable save."
+        "text": "This operative has a 6+ invulnerable save.",
+        "stats": {}
       },
       "Abilities§Exogheist Scrambler": {
         "text": "For the purposes of this operative’s Omni-scrambler ability, if this operative is in the killzone:\n- An enemy operative does not have to be Visible to a friendly operative \twith the Omni-scrambler ability to be selected.\n- This operative counts as 2 operatives when determining the number of friendly operatives with the Omni-scrambler ability in the killzone at the start of the phase."
@@ -1710,7 +1454,8 @@
         "text": "At the start of each Firefight phase after the first, if this operative is not within Live of Sight of every enemy operative, it can perform a free Dash action."
       },
       "Abilities§Favoured by Change": {
-        "text": "This operative has a 5+ invulnerable save."
+        "text": "This operative has a 5+ invulnerable save.",
+        "stats": {}
       },
       "Abilities§Feeder Tendrils": {
         "text": "Each time this operative incapacitates an enemy operative in combat, it regains up to D3 lost wounds."
@@ -1734,13 +1479,15 @@
         "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of a hot-shot lasgun it is equipped with as a result of performing an Overwatch action."
       },
       "Abilities§Gellercaust Masks": {
-        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead."
+        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead.",
+        "stats": {}
       },
       "Abilities§Gene-brew": {
         "text": "This operative ignores the effects of the Heavy special rule."
       },
       "Abilities§Get it Dun!": {
-        "text": "Each time this operative is activated, you can select one friendly KOMMANDO💀 operative within ⬟ of and visible to it. Add 1 to the selected operative’s APL."
+        "text": "Each time this operative is activated, you can select one friendly KOMMANDO💀 operative within ⬟ of and visible to it. Add 1 to the selected operative’s APL.",
+        "stats": {}
       },
       "Abilities§Gilded Horns": {
         "text": "Each time this operatives fights in combat, if it performed a Charge action during that activation, in the Roll Attack Dice step of that combat, you can retain one of your attack dice results of 5+ that is a successful hit as a critical hit."
@@ -1764,12 +1511,12 @@
         "text": "While this operative is Visible to and within ⬛ of an enemy operative, subtract 1 from the Attacks characteristic of ranged and melee weapons that enemy operative is equipped with."
       },
       "Abilities§Grit and Determination": {
+        "text": "While this operative is within ⬤ of the cenre of an objective marker, increase its Defense characteristic by 1.",
         "keywords": {
           "Tags": [
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "While this operative is within ⬤ of the cenre of an objective marker, increase its Defense characteristic by 1."
+        }
       },
       "Abilities§Gruelling Disciplinarian": {
         "text": "While a friendly BLOODED operative is Visible to and within ⬛ of this operative, it is not treated as being injured (only ignore the modifier to its Movement characteristic as a result of being injured if it is activated with ⬛ of this operative)."
@@ -1778,7 +1525,8 @@
         "text": "This operative has a 5+ invulnerable save."
       },
       "Abilities§Guardsman Orders": {
-        "text": "Each time you use one of the Strategic Ploys, it takes effect as a Guardsman Order. All friendly TEMPESTUS SCION operative and all friendly GUARDSMAN operatives within ⬟ of and Visible to a friendly GUARDSMAN SERGEANT operative are issued that order."
+        "text": "Each time you use one of the Strategic Ploys, it takes effect as a Guardsman Order. All friendly TEMPESTUS SCION operative and all friendly GUARDSMAN operatives within ⬟ of and Visible to a friendly GUARDSMAN SERGEANT operative are issued that order.",
+        "stats": {}
       },
       "Abilities§Guided Missile": {
         "text": "Perform a Shoot action using the ranged weapon below. For the purposes of Line of Sight, draw Visibility and Cover lines from a friendly VETERAN GUARDSMAN operative. Note for the purposes of this weapon’s special rule, treat that friendly VETERAN GUARDSMAN operative as performing the Shoot action."
@@ -1808,7 +1556,8 @@
         "text": "Once per battle, at the start of the Strategy phase, you can select this operative to have the pivotal role instead."
       },
       "Abilities§Hidden Horror": {
-        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
+        "stats": {}
       },
       "Abilities§High-intensity Markerlight": {
         "text": "Each time this operative performs the Markerlight action, the selected enemy operative gains 2 markerlight tokens instead of 1."
@@ -1820,7 +1569,8 @@
         "text": "Until the end of the Turning Point, each time a shooting attack is made against a friendly operative that was issued this Guardsman Order, in the Roll Defence Dice step of that shooting attack, if it is in Cover, you can re-roll any or all of your defence dice results of 1."
       },
       "Abilities§Holo suit": {
-        "text": "This operative has a 4+ invulnerable save."
+        "text": "This operative has a 4+ invulnerable save.",
+        "stats": {}
       },
       "Abilities§Holographic Readout": {
         "text": "Once per battle, when a friendly HUNTER CADRE operative (excluding a DRONE operative) is activated within ⬛ of this operative, this operative can use this ability. If it does, until the end of the friendly HUNTER CADRE operative’s activation, it can perform one mission action for one less AP (to a minimum of 0AP)."
@@ -1898,10 +1648,12 @@
         "text": "In each Strategy phase, add 2 Elite points to your pool."
       },
       "Abilities§Lightning Reflexes": {
-        "text": "This operative has a 5+ invulnerable save. Each time this operative is activated, it can perform a free Dash action during that activation."
+        "text": "This operative has a 5+ invulnerable save. Each time this operative is activated, it can perform a free Dash action during that activation.",
+        "stats": {}
       },
       "Abilities§Living Metal": {
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
+        "stats": {}
       },
       "Abilities§Lodestar Helm": {
         "text": "The second time this operative performs the Manifest Psychic Power action in each of it activations, it does not suffer any mortal wounds as a result of rolling a 1-2 (note this does not allow you to select a psychic power to be resolved)."
@@ -1910,13 +1662,15 @@
         "text": "Each time an enemy operative performs a fight action, if this operative is a valid target, you can select this operative as the target instead. Each time an enemy operative finishes a Charge action within Engagement Range of another friendly ELUCIDIAN STARSTRIDER operative within ⬛ of this operative, if this operative is not within Engagement Range of an enemy operative, this operative can perform a free Charge action, but must finish that move within Engagement Range of that enemy operative."
       },
       "Abilities§Machine": {
-        "text": "- When drawing a Visibility line from this operative, draw it from any part of the miniature.\n- This operative cannot earn (or lose) experience points and automatically passes Casualty tests.\n- This operative’s APL cannot be modified.\n- This operative can perform the Fall Back action for one less action point (to a minimum of 1AP)."
+        "text": "- When drawing a Visibility line from this operative, draw it from any part of the miniature.\n- This operative cannot earn (or lose) experience points and automatically passes Casualty tests.\n- This operative’s APL cannot be modified.\n- This operative can perform the Fall Back action for one less action point (to a minimum of 1AP).",
+        "stats": {}
       },
       "Abilities§Magnification Conduit (Apprentek)": {
         "text": "Each time this operative makes a shooting attack if a friendly CRYPTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly CRYPTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2)."
       },
       "Abilities§Magnification Conduit (Cryptek)": {
-        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2)."
+        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).",
+        "stats": {}
       },
       "Abilities§Malign Scripture": {
         "text": "Once per battle, this operative can perform two Manifest Psychic Power actions during its activation."
@@ -1931,7 +1685,8 @@
         "text": "Operatives gain Markerlight tokens as specifed by the Markerlight action. In the Ready Operatives step of each Initiative phase, remove one Markerlight token that each operative has.\n\nEach time a friendly PATHFINDER operative makes a shooting attack, it gains a number of cumulative benefits for that shooting attack depending on how many Markerlight tokens the target operative has. Operatives gain no Markerlight benefits for shooting attacks made with EMP and fusion grenades."
       },
       "Abilities§Masters of Camouflage": {
-        "text": "While this operative is in Cover, it has a Save characteristic of 4+."
+        "text": "While this operative is in Cover, it has a Save characteristic of 4+.",
+        "stats": {}
       },
       "Abilities§Meat": {
         "text": "Once during the battle, when this operative is activated, you can use this ability. If you do so, this operative regains D3+1 lost wounds."
@@ -1979,15 +1734,16 @@
         "text": "Each time this operative makes a shooting attack, when selecting a valid target for that shooting attack, enemy operatives are not Obscured."
       },
       "Abilities§Multi-spectrum Array": {
-        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect."
+        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.",
+        "stats": {}
       },
       "Abilities§Mutation": {
+        "text": "This operative gains one Boon of Tzeentch.",
         "keywords": {
           "Tags": [
             "Tzaangor"
           ]
-        },
-        "text": "This operative gains one Boon of Tzeentch."
+        }
       },
       "Abilities§Mutoid Pheromones": {
         "text": "While a friendly MUTOID VERMIN operative is within ⬛ of this operative, improve the Weapon Skill and Ballistic Skill characteristics of weapons that friendly operative is equipped with by 1."
@@ -1999,7 +1755,8 @@
         "text": "While this operative is more than ⬟ from the active operative, it is in Cover."
       },
       "Abilities§Nightmare Hulk": {
-        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative."
+        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative.",
+        "stats": {}
       },
       "Abilities§Normaliser Helm": {
         "text": "While a friendly ELUCIDIAN STARSTRIDERS operative is within ⬟ of this operative, it is not treated as being injured (only ignore the modifier to its Movement characteristic as a result of being injured if it is within ⬟ of this operative)."
@@ -2017,7 +1774,8 @@
         "text": "Each time this operative would lose a wound as a result of a mortal wound, or a shooting attack from a psychic power, roll one D6: on a 5+, that wound is not lost."
       },
       "Abilities§Omni-scrambler": {
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated."
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.",
+        "stats": {}
       },
       "Abilities§Optimised Gait": {
         "text": "Each time this operative is activated, it can ignore the first distance of ⬤ it travels for a climb, drop or traverse during that activation."
@@ -2075,7 +1833,8 @@
         "text": "This operative can perform the Pistol Barrage and Shoot actions while within Engagement Range of an enemy operative. If if does, in the Select Valid Target step of that shooting attack(s), you can only select enemy operatives within this operative’s Engagement Range as the target(s)."
       },
       "Abilities§Rad-saturation": {
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability)."
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).",
+        "stats": {}
       },
       "Abilities§Raiment of Mirrors": {
         "text": "Each time this operative fights in combat, or a shooting attack is made againt it by an enemy operative within ⬟ of it, in the Roll Attack Dice step of that combat or shooting attack, your opponent’s attack dice results of 1-3 are failed hits."
@@ -2138,12 +1897,12 @@
         "text": "This operative has a 4+ invulnerable save."
       },
       "Abilities§Rubric Affinity": {
+        "text": "For the purposes of this SORCERER operative’s Rubric Command ability, remove the distance requirement (the RUBRIC MARINE only needs to be Visible).",
         "keywords": {
           "Tags": [
             "Sorcerer"
           ]
-        },
-        "text": "For the purposes of this SORCERER operative’s Rubric Command ability, remove the distance requirement (the RUBRIC MARINE only needs to be Visible)."
+        }
       },
       "Abilities§Rubric Command": {
         "text": "Once per Turning Point, when a friendly RUBRIC MARINE operative Visible to and within ⬟ of this operative is activated, you can add 1 to that friendly operative’s APL."
@@ -2167,12 +1926,12 @@
         "text": "Once per battle, during this operative’s activation, it can perform a free Manifest Psychic Power action."
       },
       "Abilities§Savage": {
+        "text": "Weapons this operative is equipped with gain the Rending special rule.",
         "keywords": {
           "Tags": [
             "Tzaangor"
           ]
-        },
-        "text": "Weapons this operative is equipped with gain the Rending special rule."
+        }
       },
       "Abilities§Scourging Barbs": {
         "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, you can re-roll one of your attack dice. If the result of that re-roll is a 1 or 2, this operative suffers 1 mortal wound."
@@ -2181,10 +1940,12 @@
         "text": "Each time an enemy operative within ⬟ of this operative fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, your opponent must re-roll one of their successful critical hits."
       },
       "Abilities§Scuttler": {
-        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment."
+        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment.",
+        "stats": {}
       },
       "Abilities§Second in Command": {
-        "text": "If a friendly SERGEANT VETERAN operative is incapacitated and removed from the killzone, you can nominate this operative for command. If you do, until the end of the battle, it gains the LEADER keyword and the Guardsman Orders abiity."
+        "text": "If a friendly SERGEANT VETERAN operative is incapacitated and removed from the killzone, you can nominate this operative for command. If you do, until the end of the battle, it gains the LEADER keyword and the Guardsman Orders abiity.",
+        "stats": {}
       },
       "Abilities§Servo-cherub": {
         "text": "Once per Turning Point, during this operative’s activation, it can perform a mission action or the Pick Up action for one less action point (to a minimum of 0AP)."
@@ -2205,7 +1966,8 @@
         "text": "Once per battle, in the Resolve Successful Hits step of a combat or shooting attack, when damage would be inflicted on this operative from an attack dice, you can use this ability. If you do so, ignore the damage inflicted from that attack dice."
       },
       "Abilities§Shock Assault": {
-        "text": "This operative can perform two Fight actions during its activation."
+        "text": "This operative can perform two Fight actions during its activation.",
+        "stats": {}
       },
       "Abilities§Sinister Trophy": {
         "text": "While an enemy operative is within Engagement Range of this operative, subtract 1 from the Attacks characteristic of melee weapons it is equipped with."
@@ -2256,18 +2018,19 @@
         "text": "Select one enemy enemy operative in a friendly VETERAN GUARDMAN operative’s Line of Sight to be the mark. Then place a Strafing Run token anywhere in the killzone (if you have a killzone edge, it cannot be placed closer to your edge than the mark is). Draw an imaginary line, 1mm wide, with unlimited height above and below between any part of the base of the mark and the centre of that Strafing Run token. Using the ranged weapon below, make a shooting attack against the mark and each other operative that has a base crossed by that line. For those shooting attacks, when determining if another operative is a valid target and if it is in Cover, draw Visibility and Cover lines from the mark, and if they are in Cover provided by Light terrain or another operative, they are treated as having an Engage order for that attack instead."
       },
       "Abilities§Studious": {
+        "text": "Select one psychic power from a discipline this operative has not studied. This operative knows that psychic power.",
         "keywords": {
           "Tags": [
             "Sorcerer"
           ]
-        },
-        "text": "Select one psychic power from a discipline this operative has not studied. This operative knows that psychic power."
+        }
       },
       "Abilities§Support Turret": {
         "text": "This operative cannot have a Conceal order and can only perform Shoot and Overwatch actions. It cannot fight in combat (do not select a weapon or roll any attack dice for it) and cannot provide combat support."
       },
       "Abilities§Support Unit": {
-        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything."
+        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything.",
+        "stats": {}
       },
       "Abilities§Support Uplink": {
         "text": "Each time you make a shooting attack with a Privateer Support Asset, you can determine Line of Sight from this operative (even if it isn’t a NAVIS or ELUCIA VHANE operative). If you do so, enemy operatives are not Obscured for that shooting attack."
@@ -2325,7 +2088,8 @@
         "text": "Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative."
       },
       "Abilities§Throat Slitta": {
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
+        "stats": {}
       },
       "Abilities§Tilting Shield": {
         "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, your opponent cannot retain dice results of less than 6 as critical hits (as a result of the Lethal X or Rending rules)."
@@ -2364,12 +2128,12 @@
         "text": "This operative has a 5+ invulnerable save."
       },
       "Abilities§Unwavering": {
+        "text": "This operative has a 4+ invulnerable save.",
         "keywords": {
           "Tags": [
             "Rubric Marine"
           ]
-        },
-        "text": "This operative has a 4+ invulnerable save."
+        }
       },
       "Abilities§Uplinked Vid-feed": {
         "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapons as a result of performing an Overwatch action."
@@ -2396,18 +2160,20 @@
         "text": "Once per battle, when damage would be inflicted upon this operative from an attack dice, subtract 3 from the damage inflicted (to a minimum of 0)."
       },
       "Abilities§Warded": {
+        "text": "The first time an attack dice would inflict damage on this operative in each battle, halve the damage inflicted (rounding up).",
         "keywords": {
           "Tags": [
             "Rubric Marine"
           ]
-        },
-        "text": "The first time an attack dice would inflict damage on this operative in each battle, halve the damage inflicted (rounding up)."
+        }
       },
       "Abilities§Wasteland Stalkers": {
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
+        "stats": {}
       },
       "Abilities§Weaponbeast": {
-        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics."
+        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics.",
+        "stats": {}
       },
       "Abilities§Well-equipped": {
         "text": "This operative is equipped with piercing shot and toxin shot and they do not cost any equipment points for this operative. Those weapons can be selected for this operative’s use twice, instead of once."
@@ -2510,773 +2276,773 @@
         "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is not in Cover, you can retain one as a successful normal save without rolling it."
       },
       "Battle Honour§Ambusher": {
+        "text": "Once per battle, at the start or end of this operative’s activation, you can change its order.",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "Once per battle, at the start or end of this operative’s activation, you can change its order."
+        }
       },
       "Battle Honour§Apostle of Chaos": {
         "text": "This operative gains the Favoured of the Dark Gods ability."
       },
       "Battle Honour§Ardent on the Trigger": {
+        "text": "Each time this operative makes a shooting attack against a target within ⬟ of it, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack against a target within ⬟ of it, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2)."
+        }
       },
       "Battle Honour§Assassin": {
+        "text": "This operative can perform the Charge action while it has a Conceal order.",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "This operative can perform the Charge action while it has a Conceal order."
+        }
       },
       "Battle Honour§Assured": {
+        "text": "Each time a shooting attack is made against this operative, if this operative is within range of an objective marker or one of your Tac Ops tokens, or is carrying an objective marker or one of your Tac Ops tokens, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, you can retain one of them as a successful normal save without rolling it.",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "Each time a shooting attack is made against this operative, if this operative is within range of an objective marker or one of your Tac Ops tokens, or is carrying an objective marker or one of your Tac Ops tokens, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, you can retain one of them as a successful normal save without rolling it."
+        }
       },
       "Battle Honour§Audacious": {
+        "text": "In each Firefight phase, while this operative does not have a Blooded token and is within ⬟ of your opponent’s drop zone, treat it as if it has a Blooded token.",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "In each Firefight phase, while this operative does not have a Blooded token and is within ⬟ of your opponent’s drop zone, treat it as if it has a Blooded token."
+        }
       },
       "Battle Honour§Autonomic Cortex": {
+        "text": "Once per battle, when this operative is activated, you can use the Command Override Tactical Ploy without spending any CPs.",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "Once per battle, when this operative is activated, you can use the Command Override Tactical Ploy without spending any CPs."
+        }
       },
       "Battle Honour§Bitter Resolve": {
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, if this operative has less than its starting number of wounds, you can re-roll one of your defence dice.",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, if this operative has less than its starting number of wounds, you can re-roll one of your defence dice."
+        }
       },
       "Battle Honour§Bladesman’s Honour": {
+        "text": "Select one of this operative’s nelee weapons. Improve the Weapon Skill characteristic of that weapon by 1 (to a maximum of 2+).",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "Select one of this operative’s nelee weapons. Improve the Weapon Skill characteristic of that weapon by 1 (to a maximum of 2+)."
+        }
       },
       "Battle Honour§Bladework": {
+        "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, you can re-roll one of your attack dice.",
         "keywords": {
           "Tags": [
             "Combat"
           ]
-        },
-        "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, you can re-roll one of your attack dice."
+        }
       },
       "Battle Honour§Blessed Components": {
+        "text": "You can re-roll Recovery tests taken for this operative.",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "You can re-roll Recovery tests taken for this operative."
+        }
       },
       "Battle Honour§Brash": {
+        "text": "Each time this operative is issued a Guardsman Order, you can select what order it receives (it can be a different order to what other friendly operatives receive).",
         "keywords": {
           "Tags": [
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "Each time this operative is issued a Guardsman Order, you can select what order it receives (it can be a different order to what other friendly operatives receive)."
+        }
       },
       "Battle Honour§Bruiser": {
+        "text": "Each time this operative fights in combat, if it is the active operative, its melee weapons have the Brutal special rule for that combat.",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "Each time this operative fights in combat, if it is the active operative, its melee weapons have the Brutal special rule for that combat."
+        }
       },
       "Battle Honour§Calculated": {
+        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapons as a result of performing an Overwatch action.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapons as a result of performing an Overwatch action."
+        }
       },
       "Battle Honour§Capable Under Fire": {
+        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as being on an Engage order as a result of a Vantage Point.",
         "keywords": {
           "Tags": [
             "PATHFINDER",
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as being on an Engage order as a result of a Vantage Point."
+        }
       },
       "Battle Honour§Careful Aim": {
+        "text": "Each time this operative makes a shooting attack, when determining if the intended target is in Cover, Cover lines ignore the bases of all other operatives.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, when determining if the intended target is in Cover, Cover lines ignore the bases of all other operatives."
+        }
       },
       "Battle Honour§Chapter Exemplar": {
+        "text": "This operative gains an additional Chapter Tactics abiltiy. This must be an ability from the category of one of its existing Chapter Tactics abilities.",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "This operative gains an additional Chapter Tactics abiltiy. This must be an ability from the category of one of its existing Chapter Tactics abilities."
+        }
       },
       "Battle Honour§Clandestine": {
+        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as having an Engage order as a result of a Vantage Point.",
         "keywords": {
           "Tags": [
             "FARSTALKER KINBAND",
             "WYRMBLADE"
           ]
-        },
-        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as having an Engage order as a result of a Vantage Point."
+        }
       },
       "Battle Honour§Close-Quarters Composure": {
+        "text": "Each time this operative makes a shooting attack against an enemy operative within ⬟ of it, ranged weapons that operative is equipped with have the No Cover special rule for that shooting attack.",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack against an enemy operative within ⬟ of it, ranged weapons that operative is equipped with have the No Cover special rule for that shooting attack."
+        }
       },
       "Battle Honour§Collector": {
+        "text": "In the Select Equipment step, you can equip this operative with one item of equipment for the battle without spending any equipment points.",
         "keywords": {
           "Tags": [
             "Cryptek"
           ]
-        },
-        "text": "In the Select Equipment step, you can equip this operative with one item of equipment for the battle without spending any equipment points."
+        }
       },
       "Battle Honour§Consecrated Cybernetics": {
+        "text": "At the start of each Firefight phase, roll one D6 for this operative: on a 4+, this operative is not affected by the Deprecation effect of your active Imperative.",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "At the start of each Firefight phase, roll one D6 for this operative: on a 4+, this operative is not affected by the Deprecation effect of your active Imperative."
+        }
       },
       "Battle Honour§Controlling": {
+        "text": "Each time this operative performs the Command action, you can select one friendly DEATHMARK or IMMORTAL operative anywhere within the killzone (instead of Visible to and within ⬟).",
         "keywords": {
           "Tags": [
             "Cryptek"
           ]
-        },
-        "text": "Each time this operative performs the Command action, you can select one friendly DEATHMARK or IMMORTAL operative anywhere within the killzone (instead of Visible to and within ⬟)."
+        }
       },
       "Battle Honour§Corsairs 1 - Important Fate": {
+        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, the first attack fice that inflicts Critical Damage on this operative inflicts Normal Damage instead.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, the first attack fice that inflicts Critical Damage on this operative inflicts Normal Damage instead."
+        }
       },
       "Battle Honour§Corsairs 2 - Pirate Lord": {
+        "text": "Once per battle, you can use the Light Fingers, Deadly Ambush or Opportunistic Fighters Tactical Ploy without spending any CPs if this operative is the CORSAIR VOIDSCARRED operative specified by that Tactical Ploy.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "Once per battle, you can use the Light Fingers, Deadly Ambush or Opportunistic Fighters Tactical Ploy without spending any CPs if this operative is the CORSAIR VOIDSCARRED operative specified by that Tactical Ploy."
+        }
       },
       "Battle Honour§Corsairs 3 - Swift Hunter": {
+        "text": "Each time this operative performs a Charge action or moves as a result of the Deadly Ambush Tactical Ploy, it can move an additional ▲ for that action or ploy.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "Each time this operative performs a Charge action or moves as a result of the Deadly Ambush Tactical Ploy, it can move an additional ▲ for that action or ploy."
+        }
       },
       "Battle Honour§Corsairs 4 - Master of Concealment": {
+        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as being on an Engage order as a result of a Vantage Point.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "If this operative has a Conceal order and is in Cover provided by Light terrain, enemy operatives cannot treat it as being on an Engage order as a result of a Vantage Point."
+        }
       },
       "Battle Honour§Corsairs 5 - Expert Marksman": {
+        "text": "You do not need to subtract any action points for this operative to perform the Take Aim action.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "You do not need to subtract any action points for this operative to perform the Take Aim action."
+        }
       },
       "Battle Honour§Corsairs 6 - Cut-throat": {
+        "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, if you are the Attacker and either friendly operatives are supporting this operative or the target is not ready, the melee weapons this operative is equipped with gain the Rending critical hit rule for that combat.",
         "keywords": {
           "Tags": [
             "CORSAIR VOIDSCARRED"
           ]
-        },
-        "text": "Each time this operative fights in combat, in the Roll Attack Dice step of that combat, if you are the Attacker and either friendly operatives are supporting this operative or the target is not ready, the melee weapons this operative is equipped with gain the Rending critical hit rule for that combat."
+        }
       },
       "Battle Honour§Covert": {
+        "text": "When this operative is activated during the first Turning Point, you can change its order.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "When this operative is activated during the first Turning Point, you can change its order."
+        }
       },
       "Battle Honour§Crack Shot": {
+        "text": "Each time this operative makes a shooting attack, if you roll any critical hits, inflict one mortal wound on the target.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, if you roll any critical hits, inflict one mortal wound on the target."
+        }
       },
       "Battle Honour§Cunning Hunter": {
+        "text": "Each time this operative makes a shooting attack, before rolling your attack dice, if it has not performed a Normal Move, Fall Back, Dash or Charge action during that activation, you can retain one as a successful normal hit without rolling it. You cannot use this ability and the Merciless Hunter ability during the same shooting attack.",
         "keywords": {
           "Tags": [
             "PATHFINDER"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, before rolling your attack dice, if it has not performed a Normal Move, Fall Back, Dash or Charge action during that activation, you can retain one as a successful normal hit without rolling it. You cannot use this ability and the Merciless Hunter ability during the same shooting attack."
+        }
       },
       "Battle Honour§Dazzling Spectacle": {
+        "text": "Each time this operative performs a Fight action in an activation in which it has already performed a Shoot action, or performs a Shoot action in an activation in which is has already performed a Fight action, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Each time this operative performs a Fight action in an activation in which it has already performed a Shoot action, or performs a Shoot action in an activation in which is has already performed a Fight action, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2)."
+        }
       },
       "Battle Honour§Death From Above": {
+        "text": "Once per Turning Point, after this operative makes a shooting attack while on a Vantage Point, if the target did not lose any wounds as a result of that shooting attack, repeat that shooting attack.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Once per Turning Point, after this operative makes a shooting attack while on a Vantage Point, if the target did not lose any wounds as a result of that shooting attack, repeat that shooting attack."
+        }
       },
       "Battle Honour§Deckhand": {
+        "text": "Each time this operative performs the Operate Hatch action, roll one D6: on a 3+, the action point subtracted to perform that action is refunded.",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "Each time this operative performs the Operate Hatch action, roll one D6: on a 3+, the action point subtracted to perform that action is refunded."
+        }
       },
       "Battle Honour§Decorated Veteran": {
+        "text": "Improve the Ballistic Skill characteristic of this operative’s ranged weapons by 1 (to a maximum of 3+).",
         "keywords": {
           "Tags": [
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "Improve the Ballistic Skill characteristic of this operative’s ranged weapons by 1 (to a maximum of 3+)."
+        }
       },
       "Battle Honour§Destructive": {
         "text": "Each time this operative performs a Fight action, if it made a Charge action during that activation, its melee weapons gain the Relentless special rule for that combat."
       },
       "Battle Honour§Determined": {
+        "text": "Each time this operative is activated, if it is within ⬤ of the centre of an objective marker, add 1 to its APL.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "Each time this operative is activated, if it is within ⬤ of the centre of an objective marker, add 1 to its APL."
+        }
       },
       "Battle Honour§Devastating Assault": {
+        "text": "Melee weapons this operative is equipped with gain the Brutal special rule.",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "Melee weapons this operative is equipped with gain the Brutal special rule."
+        }
       },
       "Battle Honour§Devout": {
+        "text": "During the first Turning Point, this operative can perform the \"Pray for Guidance\" action.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "During the first Turning Point, this operative can perform the \"Pray for Guidance\" action."
+        }
       },
       "Battle Honour§Dirty Fighter": {
+        "text": "Each time this operative fights in combat, if any friendly operatives are supporting them, add 1 to the Attacks characteristic of their melee weapons for that combat.",
         "keywords": {
           "Tags": [
             "Combat"
           ]
-        },
-        "text": "Each time this operative fights in combat, if any friendly operatives are supporting them, add 1 to the Attacks characteristic of their melee weapons for that combat."
+        }
       },
       "Battle Honour§Discretionary": {
+        "text": "Once per battle, when this operative is activated, you can use the Daring Tactical Ploy without spending any Command points.",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "Once per battle, when this operative is activated, you can use the Daring Tactical Ploy without spending any Command points."
+        }
       },
       "Battle Honour§Dodge": {
+        "text": "Each time this operative performs a Normal Move or Dash action, it can move within Engagement Range of enemy operatives. It cannot finish that move within Engagement Range of them. Each time this operative performs a Charge action, so long as it finishes that move within Engagement Range of an enemy operative, it can move within Engagement Range of any enemy operatives during that move.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "Each time this operative performs a Normal Move or Dash action, it can move within Engagement Range of enemy operatives. It cannot finish that move within Engagement Range of them. Each time this operative performs a Charge action, so long as it finishes that move within Engagement Range of an enemy operative, it can move within Engagement Range of any enemy operatives during that move."
+        }
       },
       "Battle Honour§Duellist": {
+        "text": "Each time this operative fights in combat, subtract 1 from the Weapon Skill characteristic of the enemy operative for that combat.",
         "keywords": {
           "Tags": [
             "Combat"
           ]
-        },
-        "text": "Each time this operative fights in combat, subtract 1 from the Weapon Skill characteristic of the enemy operative for that combat."
+        }
       },
       "Battle Honour§Dynamic": {
+        "text": "Each time this operative is activated, you can ignore any or all modifiers to its APL and Movement characteristics.",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "Each time this operative is activated, you can ignore any or all modifiers to its APL and Movement characteristics."
+        }
       },
       "Battle Honour§Elusive": {
+        "text": "Each time this operative is activated, if it is within Engagement Range of only one enemy operative, roll one D6: on a 4+, it can perform the Fall Back action for one less action point during that activation (to a minimum of 0AP).",
         "keywords": {
           "Tags": [
             "WYRMBLADE"
           ]
-        },
-        "text": "Each time this operative is activated, if it is within Engagement Range of only one enemy operative, roll one D6: on a 4+, it can perform the Fall Back action for one less action point during that activation (to a minimum of 0AP)."
+        }
       },
       "Battle Honour§Enduring": {
+        "text": "If this operative was not reanimated during the Turning Point, it can regain up to D3 additional lost wounds as a result of the Living Metal ability. If it does so, it cannot regain any lost wounds as a result of the Canoptek Repair action during the same Turning Point.",
         "keywords": {
           "Tags": [
             "HIEROTEK CIRCLE"
           ]
-        },
-        "text": "If this operative was not reanimated during the Turning Point, it can regain up to D3 additional lost wounds as a result of the Living Metal ability. If it does so, it cannot regain any lost wounds as a result of the Canoptek Repair action during the same Turning Point."
+        }
       },
       "Battle Honour§Enhanced Bionics": {
+        "text": "Each time this operative would lose a wound, roll one D6: on a 6, that wound is not lost.",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 6, that wound is not lost."
+        }
       },
       "Battle Honour§Evasive": {
+        "text": "Each time this operative is the target of a shooting attack, in the Roll Defence Dice step of that shooting attack, if it has a Conceal order, you can re-roll one of your defence dice.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "Each time this operative is the target of a shooting attack, in the Roll Defence Dice step of that shooting attack, if it has a Conceal order, you can re-roll one of your defence dice."
+        }
       },
       "Battle Honour§Eye on the Mark": {
+        "text": "Each time this operative makes a shooting attack during its activation, if it has not yet moved during that activation, ranged weapons it is equipped with (excluding quill grenades) gain the No Cover special rule for that shooting attack.",
         "keywords": {
           "Tags": [
             "FARSTALKER KINBAND"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack during its activation, if it has not yet moved during that activation, ranged weapons it is equipped with (excluding quill grenades) gain the No Cover special rule for that shooting attack."
+        }
       },
       "Battle Honour§Faith in the Machine": {
+        "text": "Each time this operative is activated, you can ignore any or all modifiers to its APL.",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "Each time this operative is activated, you can ignore any or all modifiers to its APL."
+        }
       },
       "Battle Honour§Final Litany": {
+        "text": "When this operative is incapacitated, you can use the In Death, Atonement Tactical Ploy without spending any Command Points if this operative is the VETERAN GUARDSMAN selected. If you do, for that operative’s next activation, change the Ballistic Skill characteristic of its ranged weapons to 2+.",
         "keywords": {
           "Tags": [
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "When this operative is incapacitated, you can use the In Death, Atonement Tactical Ploy without spending any Command Points if this operative is the VETERAN GUARDSMAN selected. If you do, for that operative’s next activation, change the Ballistic Skill characteristic of its ranged weapons to 2+."
+        }
       },
       "Battle Honour§Fixated": {
+        "text": "The first time you roll attack dice for this operative in each battle, you can select one successful normal hit to be retained as a critical hit instead. That retained hit cannot cause any futher critical hits to be retained (e.g. as a result of the Rending critical hit rule).",
         "keywords": {
           "Tags": [
             "HUNTER CLADE"
           ]
-        },
-        "text": "The first time you roll attack dice for this operative in each battle, you can select one successful normal hit to be retained as a critical hit instead. That retained hit cannot cause any futher critical hits to be retained (e.g. as a result of the Rending critical hit rule)."
+        }
       },
       "Battle Honour§Fly Swarm": {
+        "text": "Each time a shooting attack is made against this operative by an enemy operative more than ⬟ from it, in the Roll Defence Dice step of that shooting attack, you can re-roll any or all of your defence dice results of 1.",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "Each time a shooting attack is made against this operative by an enemy operative more than ⬟ from it, in the Roll Defence Dice step of that shooting attack, you can re-roll any or all of your defence dice results of 1."
+        }
       },
       "Battle Honour§Focused": {
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier.",
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier."
+        }
       },
       "Battle Honour§For the Greater Good": {
+        "text": "This operative can perform the Markerlight action twice during its activation. In addition, when this operative is incapacitated, it can perform a free Markerlight action, even if it is within Engagement Range of an enemy operative. If this operative cannot perform the Markerlight action, determine a different Battle Honour for it.",
         "keywords": {
           "Tags": [
             "PATHFINDER"
           ]
-        },
-        "text": "This operative can perform the Markerlight action twice during its activation. In addition, when this operative is incapacitated, it can perform a free Markerlight action, even if it is within Engagement Range of an enemy operative. If this operative cannot perform the Markerlight action, determine a different Battle Honour for it."
+        }
       },
       "Battle Honour§Freakish Follower": {
+        "text": "If this operative is ready, it can be activated to fulfil the Group Activation requirement of another friendly GELLERPOX INFECTED operative it could not normally be activated with (e.g. even if it is not of the same type, and even if it has a Group Activation characteristic of 1).",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "If this operative is ready, it can be activated to fulfil the Group Activation requirement of another friendly GELLERPOX INFECTED operative it could not normally be activated with (e.g. even if it is not of the same type, and even if it has a Group Activation characteristic of 1)."
+        }
       },
       "Battle Honour§Fuelled By Hate": {
+        "text": "While this operative has fewer than half its wounds remaining, each time it is activated, add 1 to its APL.",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "While this operative has fewer than half its wounds remaining, each time it is activated, add 1 to its APL."
+        }
       },
       "Battle Honour§Gallant": {
+        "text": "Each time this operative fights in combat or makes a shooting attack, if it is within ⬟ of your opponent’s drop zone or killzone edge, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice.",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "Each time this operative fights in combat or makes a shooting attack, if it is within ⬟ of your opponent’s drop zone or killzone edge, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice."
+        }
       },
       "Battle Honour§Ghost": {
+        "text": "Once per battle, this operative can perform the Guerilla Warfare action for one less action point (to a minimum of 0AP).",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "Once per battle, this operative can perform the Guerilla Warfare action for one less action point (to a minimum of 0AP)."
+        }
       },
       "Battle Honour§Glare of Condemnation": {
+        "text": "Each time an enemy operative would perform a psychic action, if it is within ⬛ of one or more friendly operatives with this Battle Honour, 1 additional AP must be subtracted to perform that action.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "Each time an enemy operative would perform a psychic action, if it is within ⬛ of one or more friendly operatives with this Battle Honour, 1 additional AP must be subtracted to perform that action."
+        }
       },
       "Battle Honour§Guerrilla": {
+        "text": "For the purposes of the Guerrilla Warfare action, this operative cannot perform that action while within ⬛ of an enemy operative (instead of ⬟).",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "For the purposes of the Guerrilla Warfare action, this operative cannot perform that action while within ⬛ of an enemy operative (instead of ⬟)."
+        }
       },
       "Battle Honour§Gun Ace": {
+        "text": "Each time this operative makes a shooting attack, in the Roll Attack dice step of that shooting attack, you can re-roll one of your attack dice.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, in the Roll Attack dice step of that shooting attack, you can re-roll one of your attack dice."
+        }
       },
       "Battle Honour§Gutsy": {
+        "text": "This operative always treats the Close Assault Strategic Ploy as having been used.",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "This operative always treats the Close Assault Strategic Ploy as having been used."
+        }
       },
       "Battle Honour§Honoured by the Armoury": {
+        "text": "In the Select Equipment step, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for one less equipment point (to a minimum of 0EP).",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "In the Select Equipment step, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for one less equipment point (to a minimum of 0EP)."
+        }
       },
       "Battle Honour§Independent Equipage": {
+        "text": "Before the battle, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for one less equipment point (to a minimum of 0EP).",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "Before the battle, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for one less equipment point (to a minimum of 0EP)."
+        }
       },
       "Battle Honour§Indomitable": {
+        "text": "Each time this operative would lose a wound as a result of a mortal wound or critical damage, roll one D6: on a 5+, that wound is not lost.",
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "text": "Each time this operative would lose a wound as a result of a mortal wound or critical damage, roll one D6: on a 5+, that wound is not lost."
+        }
       },
       "Battle Honour§Inexorable": {
+        "text": "Each time this operative fights in combat, the enemy operative in that combat cannot be supported.",
         "keywords": {
           "Tags": [
             "Combat"
           ]
-        },
-        "text": "Each time this operative fights in combat, the enemy operative in that combat cannot be supported."
+        }
       },
       "Battle Honour§Ingenious": {
+        "text": "This operative gains the remaining Cryptek action from its datacard.",
         "keywords": {
           "Tags": [
             "Cryptek"
           ]
-        },
-        "text": "This operative gains the remaining Cryptek action from its datacard."
+        }
       },
       "Battle Honour§Invulnerable": {
+        "text": "Each time this operative is the target of a shooting attack, in the Roll Defence Dice step of that shooting attack, ignore the AP1 special rule.",
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "text": "Each time this operative is the target of a shooting attack, in the Roll Defence Dice step of that shooting attack, ignore the AP1 special rule."
+        }
       },
       "Battle Honour§Irritable": {
+        "text": "While this operative has lost any wounds, add 1 to both Damage characteristics of its melee weapons.",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "While this operative has lost any wounds, add 1 to both Damage characteristics of its melee weapons."
+        }
       },
       "Battle Honour§Kill Shot": {
+        "text": "Select one of the ranged weapons this model is equipped with (if the weapon has more than one profile, select one of those profiles). Add 1 to its Critical Damage characteristic.",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "Select one of the ranged weapons this model is equipped with (if the weapon has more than one profile, select one of those profiles). Add 1 to its Critical Damage characteristic."
+        }
       },
       "Battle Honour§Leathery Physiology": {
+        "text": "Each time this operative would lose a wound as a result of an attack dice that inflicts 4 damage or less, roll one D6: on a 6, that wound is not lost.",
         "keywords": {
           "Tags": [
             "FARSTALKER KINBAND"
           ]
-        },
-        "text": "Each time this operative would lose a wound as a result of an attack dice that inflicts 4 damage or less, roll one D6: on a 6, that wound is not lost."
+        }
       },
       "Battle Honour§Loyal to House Vhane": {
+        "text": "Each time this operative fights in combat or makes a shooting attack, if it is within ⬟ of a friendly ELUCIA VHANE operative, in the Roll Attack Dice step of that combat or shooting attack, before rolling your attack dice, you can retain one as a successful normal hit without rolling it.",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "Each time this operative fights in combat or makes a shooting attack, if it is within ⬟ of a friendly ELUCIA VHANE operative, in the Roll Attack Dice step of that combat or shooting attack, before rolling your attack dice, you can retain one as a successful normal hit without rolling it."
+        }
       },
       "Battle Honour§Marauder": {
+        "text": "Once per Turning Point, one friendly operative with this Battle Honour (excluding a TRAITOR OGRYN operative) can perform one mission action or the Pick Up action for one less action point (to a minimum of 0AP).",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "Once per Turning Point, one friendly operative with this Battle Honour (excluding a TRAITOR OGRYN operative) can perform one mission action or the Pick Up action for one less action point (to a minimum of 0AP)."
+        }
       },
       "Battle Honour§Marksman’s Honour": {
+        "text": "Select one of this operative’s ranged weapons. Improve the Ballistic Skill characteristic of that weapon by 1 (to a maximum of 2+).",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "Select one of this operative’s ranged weapons. Improve the Ballistic Skill characteristic of that weapon by 1 (to a maximum of 2+)."
+        }
       },
       "Battle Honour§Martial Artistry": {
+        "text": "Each time this operative fights in combat, at the end of the Roll Attack Dice step of that combat, if you have retained more normal hits than your opponent has, you can change one of your retained successful normal hits to a critical hit instead.",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Each time this operative fights in combat, at the end of the Roll Attack Dice step of that combat, if you have retained more normal hits than your opponent has, you can change one of your retained successful normal hits to a critical hit instead."
+        }
       },
       "Battle Honour§Martial Philosopher": {
+        "text": "When a friendly SHAS’UI operative uses its Art of War ability, you can select which Art of War this operative benefits from (it can be a different Art of War to what other friendly operatives benefit from).",
         "keywords": {
           "Tags": [
             "PATHFINDER"
           ]
-        },
-        "text": "When a friendly SHAS’UI operative uses its Art of War ability, you can select which Art of War this operative benefits from (it can be a different Art of War to what other friendly operatives benefit from)."
+        }
       },
       "Battle Honour§Merciless Hunter": {
+        "text": "Each time this operative makes a shooting attack, before rolling your attack dice, if the target is within ⬟ of it, you can retain on as a successful normal hit without rolling it. You cannot use this ability and the Cunning Hunter ability during the same shooting attack.",
         "keywords": {
           "Tags": [
             "PATHFINDER"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, before rolling your attack dice, if the target is within ⬟ of it, you can retain on as a successful normal hit without rolling it. You cannot use this ability and the Cunning Hunter ability during the same shooting attack."
+        }
       },
       "Battle Honour§Mercurial": {
+        "text": "Each time a shooting attack is made against this operative by an enemy operative more than ⬟ away, in the Roll Defence Dice step of that shooting attack, you can re-roll one of your defence dice.",
         "keywords": {
           "Tags": [
             "WYRMBLADE"
           ]
-        },
-        "text": "Each time a shooting attack is made against this operative by an enemy operative more than ⬟ away, in the Roll Defence Dice step of that shooting attack, you can re-roll one of your defence dice."
+        }
       },
       "Battle Honour§Mobile": {
+        "text": "This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "This operative can perform the Fall Back action for one less action point (to a minimum of 0AP)."
+        }
       },
       "Battle Honour§Motivation for Violence": {
+        "text": "Each time this operative performs a Charge action, it can move an additional ▲ for that action.",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "Each time this operative performs a Charge action, it can move an additional ▲ for that action."
+        }
       },
       "Battle Honour§Obstinate Gifts": {
+        "text": "You can ignore any or all modifiers to this operative’s Movement and APL characteristics.",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "You can ignore any or all modifiers to this operative’s Movement and APL characteristics."
+        }
       },
       "Battle Honour§Picket": {
+        "text": "During the Set Up Operatives step of the mission sequence, this operative can be set up within ⬛ of your drop zone.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "During the Set Up Operatives step of the mission sequence, this operative can be set up within ⬛ of your drop zone."
+        }
       },
       "Battle Honour§Pious": {
+        "text": "Each time this operative performs one or more Acts of Faith during its activation, roll one D6: on a 5+, you gain 1 Faith point.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "Each time this operative performs one or more Acts of Faith during its activation, roll one D6: on a 5+, you gain 1 Faith point."
+        }
       },
       "Battle Honour§Pre-eminent": {
+        "text": "Once per battle, if an operative with this Battle Honour is the first friendly operative to be activated during the Turning Point, you can use this Battle Honour. If you do so, until the end of the Turning Point, weapons that operative is equipped with gain the Lethal 5+ special rule. Note that you can only use this Battle Honour once per battle (even if more than one friendly operative has this Battle Honour).",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Once per battle, if an operative with this Battle Honour is the first friendly operative to be activated during the Turning Point, you can use this Battle Honour. If you do so, until the end of the Turning Point, weapons that operative is equipped with gain the Lethal 5+ special rule. Note that you can only use this Battle Honour once per battle (even if more than one friendly operative has this Battle Honour)."
+        }
       },
       "Battle Honour§Prowler": {
+        "text": "For the purposes of this operative performing mission actions, it only needs to be within the required range of an objective marker or token (it does not need to control it).",
         "keywords": {
           "Tags": [
             "WYRMBLADE"
           ]
-        },
-        "text": "For the purposes of this operative performing mission actions, it only needs to be within the required range of an objective marker or token (it does not need to control it)."
+        }
       },
       "Battle Honour§Quick of Thought and Action": {
+        "text": "At the start of each Turning Point, if this operative is not within Engagement Range of an enemy operative, it can immediately perform a Dash action.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "At the start of each Turning Point, if this operative is not within Engagement Range of an enemy operative, it can immediately perform a Dash action."
+        }
       },
       "Battle Honour§Raider": {
+        "text": "This operative can perform the Charge action while within Engagement Range of an enemy operative.",
         "keywords": {
           "Tags": [
             "PHOBOS STRIKE TEAM"
           ]
-        },
-        "text": "This operative can perform the Charge action while within Engagement Range of an enemy operative."
+        }
       },
       "Battle Honour§Reliant Support": {
+        "text": "Each time you would use the Suppressing Fire Tactical Ploy and select this operative, that Tactical Ploy costs 0CP for that use.",
         "keywords": {
           "Tags": [
             "PATHFINDER"
           ]
-        },
-        "text": "Each time you would use the Suppressing Fire Tactical Ploy and select this operative, that Tactical Ploy costs 0CP for that use."
+        }
       },
       "Battle Honour§Repugnant Stench": {
+        "text": "Each time an enemy operative is activated within ⬛ of this operative, that enemy operative is treated as being injured for the purposes of its Movement characteristic.",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "Each time an enemy operative is activated within ⬛ of this operative, that enemy operative is treated as being injured for the purposes of its Movement characteristic."
+        }
       },
       "Battle Honour§Repulsive Resilience": {
+        "text": "For the purposes of the Revoltingly Resilient ability, you can re-roll results of 1 for this operative.",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "For the purposes of the Revoltingly Resilient ability, you can re-roll results of 1 for this operative."
+        }
       },
       "Battle Honour§Resilient": {
+        "text": "Add 2 to this operative’s Wounds characteristic.",
+        "stats": {
+          "W": {
+            "statType": "numeric",
+            "value": 2,
+            "visibility": "hidden",
+            "dynamic": false,
+            "tracked": true
+          }
+        },
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "stats": {
-          "W": {
-            "dynamic": false,
-            "statType": "numeric",
-            "tracked": true,
-            "value": 2,
-            "visibility": "hidden"
-          }
-        },
-        "text": "Add 2 to this operative’s Wounds characteristic."
+        }
       },
       "Battle Honour§Resolute": {
+        "text": "While this operative is carrying or within  ⬤ of an objective marker, each time a shooting attack is made against it, in the Roll Defence Dice step of that shooting attack, you can re-roll one of your defence dice.",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "While this operative is carrying or within  ⬤ of an objective marker, each time a shooting attack is made against it, in the Roll Defence Dice step of that shooting attack, you can re-roll one of your defence dice."
+        }
       },
       "Battle Honour§Revenant": {
+        "text": "Each time you roll one D6 for a Reanimation token placed for this operative, add 1 to the result. Each time this operative is successfully reanimated, it has 3 wounds remaining, instead of D3.",
         "keywords": {
           "Tags": [
             "HIEROTEK CIRCLE"
           ]
-        },
-        "text": "Each time you roll one D6 for a Reanimation token placed for this operative, add 1 to the result. Each time this operative is successfully reanimated, it has 3 wounds remaining, instead of D3."
+        }
       },
       "Battle Honour§Righteous Purpose": {
+        "text": "Each time an attack dice would inflict critical damage on this operative, you can choose for that dice to inflict normal damage instead.",
         "keywords": {
           "Tags": [
             "NOVITIATE"
           ]
-        },
-        "text": "Each time an attack dice would inflict critical damage on this operative, you can choose for that dice to inflict normal damage instead."
+        }
       },
       "Battle Honour§Runner": {
+        "text": "Each time this operative is activated, so long as it does not perform a Shoot or Fight action during that activation, it can perform one free Dash action.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "Each time this operative is activated, so long as it does not perform a Shoot or Fight action during that activation, it can perform one free Dash action."
+        }
       },
       "Battle Honour§Savage": {
         "text": "Add 1 to the Attacks characteristic of melee weapons this operative is equipped with (to a maximum of 4)."
@@ -3289,247 +3055,247 @@
         }
       },
       "Battle Honour§Scrapper": {
+        "text": "Improve the Weapon Skill characteristic of melee weapons this operative is equipped with by 1 (to a maximum of 2+).",
         "keywords": {
           "Tags": [
             "IMPERIAL NAVY BREACHER"
           ]
-        },
-        "text": "Improve the Weapon Skill characteristic of melee weapons this operative is equipped with by 1 (to a maximum of 2+)."
+        }
       },
       "Battle Honour§Scurry": {
+        "text": "While this operative has a Conceal order, add ▲ to its Movement characteristic.",
         "keywords": {
           "Tags": [
             "WYRMBLADE"
           ]
-        },
-        "text": "While this operative has a Conceal order, add ▲ to its Movement characteristic."
+        }
       },
       "Battle Honour§Servant of the Dark Gods": {
+        "text": "Once per action, when an attack dice would inflict Critical Damage on this operative, you can choose for it to inflict Normal Damage instead.",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "Once per action, when an attack dice would inflict Critical Damage on this operative, you can choose for it to inflict Normal Damage instead."
+        }
       },
       "Battle Honour§Sharp Instincts": {
+        "text": "Each time this operative makes a shooting attack, enemy operatives must be more than 2⬤ (instead of ⬤) from this operative to be in Cover.",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "Each time this operative makes a shooting attack, enemy operatives must be more than 2⬤ (instead of ⬤) from this operative to be in Cover."
+        }
       },
       "Battle Honour§Sharpshooter": {
+        "text": "Each time this operative performs a Shoot action, when you would retain attack dice for that action’s shooting attack, if it has not performed a Normal Move, Fall Back or Charge action during that activation, you can select one of your results of 5+ to be retained as a critical hit.",
         "keywords": {
           "Tags": [
             "Marksman"
           ]
-        },
-        "text": "Each time this operative performs a Shoot action, when you would retain attack dice for that action’s shooting attack, if it has not performed a Normal Move, Fall Back or Charge action during that activation, you can select one of your results of 5+ to be retained as a critical hit."
+        }
       },
       "Battle Honour§Shifty": {
+        "text": "Each time this operative is the target of a shooting attack, before rolling defence dice for that shooting attack, if it is in Cover and either has a Conceal order or is Ready, you can retain 2 dice as successful normal saves as a result of cover (instead of 1).",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "Each time this operative is the target of a shooting attack, before rolling defence dice for that shooting attack, if it is in Cover and either has a Conceal order or is Ready, you can retain 2 dice as successful normal saves as a result of cover (instead of 1)."
+        }
       },
       "Battle Honour§Shrug Off": {
+        "text": "Each time this operative is the target of a shooting attack, in the Roll Attack Dice step of that shooting attack, you can change one of your opponent’s retained critical hits to a normal hit.",
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "text": "Each time this operative is the target of a shooting attack, in the Roll Attack Dice step of that shooting attack, you can change one of your opponent’s retained critical hits to a normal hit."
+        }
       },
       "Battle Honour§Siege Specialist": {
         "text": "Select one of this operative’s ranged weapons. It gains the No Cover special rule."
       },
       "Battle Honour§Skinna": {
+        "text": "Each time this operative fights in combat, when you would retain attack dice for that combat, you can select one of your results of 5+ to be retained as a critical hit.",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "Each time this operative fights in combat, when you would retain attack dice for that combat, you can select one of your results of 5+ to be retained as a critical hit."
+        }
       },
       "Battle Honour§Specialised": {
+        "text": "Select one Battle Honour for this operative from the Combat, Staunch, Marksman or Scout specialisms. Note that you can select a Battle Honour from that specialism even if the operative couldn’t normally progress in it.",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "Select one Battle Honour for this operative from the Combat, Staunch, Marksman or Scout specialisms. Note that you can select a Battle Honour from that specialism even if the operative couldn’t normally progress in it."
+        }
       },
       "Battle Honour§Spiritual Resolve": {
+        "text": "You can re-roll Recovery tests taken for this operative. In addition, each time this operative gains a Battle Scar, you can roll an extra D6 and select which result to use.",
         "keywords": {
           "Tags": [
             "INTERCESSION SQUAD"
           ]
-        },
-        "text": "You can re-roll Recovery tests taken for this operative. In addition, each time this operative gains a Battle Scar, you can roll an extra D6 and select which result to use."
+        }
       },
       "Battle Honour§Stalker": {
+        "text": "You can use the Slink Into Darkness Tactical Ploy for this operative twice, instead of once.",
         "keywords": {
           "Tags": [
             "WYRMBLADE"
           ]
-        },
-        "text": "You can use the Slink Into Darkness Tactical Ploy for this operative twice, instead of once."
+        }
       },
       "Battle Honour§Stalwart": {
+        "text": "This operative is never injured.",
         "keywords": {
           "Tags": [
             "Staunch"
           ]
-        },
-        "text": "This operative is never injured."
+        }
       },
       "Battle Honour§Swift": {
+        "text": "This operative can perform a Dash action more that once during its activation. In addition, it automatically passes Jump tests and does not need to spend ⬤ to traverse.",
         "keywords": {
           "Tags": [
             "Scout"
           ]
-        },
-        "text": "This operative can perform a Dash action more that once during its activation. In addition, it automatically passes Jump tests and does not need to spend ⬤ to traverse."
+        }
       },
       "Battle Honour§Thievin’ Git": {
+        "text": "Before the battle, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for 1 less EP (to a minimum of 0).",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "Before the battle, when selecting equipment from your stash, you can select one item of equipment to equip this operative with for 1 less EP (to a minimum of 0)."
+        }
       },
       "Battle Honour§Trapper": {
+        "text": "This operative can perform a Charge action if it has a Conceal order.",
         "keywords": {
           "Tags": [
             "FARSTALKER KINBAND"
           ]
-        },
-        "text": "This operative can perform a Charge action if it has a Conceal order."
+        }
       },
       "Battle Honour§Twisted Talons": {
+        "text": "If this operative is a GLITCHLING, melee weapons this operative is equipped with gain the Lethal 5+ special rule. Otherwise, melee weapons this operative is equipped with gain the Brutal special rule.",
         "keywords": {
           "Tags": [
             "GELLERPOX INFECTED"
           ]
-        },
-        "text": "If this operative is a GLITCHLING, melee weapons this operative is equipped with gain the Lethal 5+ special rule. Otherwise, melee weapons this operative is equipped with gain the Brutal special rule."
+        }
       },
       "Battle Honour§Unrelenting": {
+        "text": "You can ignore any or all modifiers to this operative’s APL and Movement characteristics and it is not affected by the Stun critical hit rule.",
         "keywords": {
           "Tags": [
             "HIEROTEK CIRCLE"
           ]
-        },
-        "text": "You can ignore any or all modifiers to this operative’s APL and Movement characteristics and it is not affected by the Stun critical hit rule."
+        }
       },
       "Battle Honour§Vengeance Incarnate": {
+        "text": "Select one weapon this operative is equipped with. Improve the Ballistic Skill or Weapon Skill characteristic of that weapon by 1 (to a maximum of 2+).",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "Select one weapon this operative is equipped with. Improve the Ballistic Skill or Weapon Skill characteristic of that weapon by 1 (to a maximum of 2+)."
+        }
       },
       "Battle Honour§Vengeful": {
+        "text": "Each time this operative fights in combat or makes a shooting attack against an enemy operative that does not have the IMPERIUM keyword, before rolling your attack dice, you can retain one as a successful hit without rolling it.",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "Each time this operative fights in combat or makes a shooting attack against an enemy operative that does not have the IMPERIUM keyword, before rolling your attack dice, you can retain one as a successful hit without rolling it."
+        }
       },
       "Battle Honour§Veteran of the Frontier": {
+        "text": "Each time a shooting attack is made against this operative, if this operative is within ⬟ of an enemy operative and more than ⬛ from all other friendly operatives, in the Roll Defence Dice step of that shooting attack, you can retain one successful normal save as a critical save instead.",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "Each time a shooting attack is made against this operative, if this operative is within ⬟ of an enemy operative and more than ⬛ from all other friendly operatives, in the Roll Defence Dice step of that shooting attack, you can retain one successful normal save as a critical save instead."
+        }
       },
       "Battle Honour§Vicious": {
+        "text": "Add 1 to the Critical Damage characteristic of this operative’s melee weapons.",
         "keywords": {
           "Tags": [
             "Combat"
           ]
-        },
-        "text": "Add 1 to the Critical Damage characteristic of this operative’s melee weapons."
+        }
       },
       "Battle Honour§Virtuoso": {
+        "text": "Once per battle, this operative can perform two Shoot actions with a shuriken pistol or two Fight actions during its activation.",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Once per battle, this operative can perform two Shoot actions with a shuriken pistol or two Fight actions during its activation."
+        }
       },
       "Battle Honour§Voidmaster’s Commendation": {
+        "text": "Ranged weapons this operative is equipped with gain the Balanced special rule.",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "Ranged weapons this operative is equipped with gain the Balanced special rule."
+        }
       },
       "Battle Honour§War-hardened": {
+        "text": "The first time an enemy operative is incapacitated by this operative in each battle, add 1 Elite point to your pool.",
         "keywords": {
           "Tags": [
             "KASRKIN"
           ]
-        },
-        "text": "The first time an enemy operative is incapacitated by this operative in each battle, add 1 Elite point to your pool."
+        }
       },
       "Battle Honour§Warp-blessed": {
+        "text": "Improve this operative’s Save characteristic by 1 (to a maximum of 2+).",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "Improve this operative’s Save characteristic by 1 (to a maximum of 2+)."
+        }
       },
       "Battle Honour§Well Prepared": {
+        "text": "In the Select Equipment step, when selecting equipment from your stash, you can select one piece of equipment. Every operative with this Battle Honour that can be equipped with that item can do so for one less equipment point each (to a minimum of 0EP).",
         "keywords": {
           "Tags": [
             "EUCLIDEAN STARSTRIDER"
           ]
-        },
-        "text": "In the Select Equipment step, when selecting equipment from your stash, you can select one piece of equipment. Every operative with this Battle Honour that can be equipped with that item can do so for one less equipment point each (to a minimum of 0EP)."
+        }
       },
       "Battle Honour§Well Versed": {
+        "text": "Once per battle, you can use a VOID-DANCER TROUPE Tactical Ploy without spending any Command Points if this operative is the VOID-DANCER TROUPE operative specified by that Tactical Ploy.",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Once per battle, you can use a VOID-DANCER TROUPE Tactical Ploy without spending any Command Points if this operative is the VOID-DANCER TROUPE operative specified by that Tactical Ploy."
+        }
       },
       "Battle Honour§Whimsical": {
+        "text": "Each time this operative is activated, you can use the Capricious Role Tactical Ploy for this operative without spending any Command Points.",
         "keywords": {
           "Tags": [
             "VOID-DANCER TROUPE"
           ]
-        },
-        "text": "Each time this operative is activated, you can use the Capricious Role Tactical Ploy for this operative without spending any Command Points."
+        }
       },
       "Battle Honour§Wiry": {
+        "text": "Each time this operative makes any kind of move, it can move around, across and over other operatives (and their bases) as if they were not there, but must finish its move following all requirements specified by that move, and cannot finish its move on top of other operatives (or their bases).",
         "keywords": {
           "Tags": [
             "FARSTALKER KINBAND"
           ]
-        },
-        "text": "Each time this operative makes any kind of move, it can move around, across and over other operatives (and their bases) as if they were not there, but must finish its move following all requirements specified by that move, and cannot finish its move on top of other operatives (or their bases)."
+        }
       },
       "Battle Honour§Zealous": {
+        "text": "If this operative is incapacitated, if it has a Blooded token and incapacitated one or more enemy operatives during the battle, add that token to your pool.",
         "keywords": {
           "Tags": [
             "BLOODED"
           ]
-        },
-        "text": "If this operative is incapacitated, if it has a Blooded token and incapacitated one or more enemy operatives during the battle, add that token to your pool."
+        }
       },
       "Battle Scar§Critical Impairment": {
         "text": "This operative cannot perform Dash actions and its APL characteristic cannot be modified."
@@ -7304,23 +7070,19 @@
         }
       },
       "Fire Team§Arco-Flagellant Fire Team": {
-        "assets": {
-          "traits": [
-            {
-              "item": "Operative—Ecclesiarchy§Arco-flagellant",
-              "quantity": 5
-            }
-          ]
-        },
         "keywords": {
           "Tags": [
             "ECCLESIARCHY"
           ]
         },
-        "stats": {
-          "modelToTrack": {
-            "value": "Operative—Ecclesiarchy§Arco-flagellant"
-          }
+        "assets": {
+          "traits": [
+            "Operative—Ecclesiarchy§Arco-flagellant",
+            "Operative—Ecclesiarchy§Arco-flagellant",
+            "Operative—Ecclesiarchy§Arco-flagellant",
+            "Operative—Ecclesiarchy§Arco-flagellant",
+            "Operative—Ecclesiarchy§Arco-flagellant"
+          ]
         }
       },
       "Fire Team§Assault Intercessor Fire Team": {
@@ -7331,6 +7093,11 @@
         }
       },
       "Fire Team§Battle Sister Fire Team": {
+        "keywords": {
+          "Tags": [
+            "ECCLESIARCHY"
+          ]
+        },
         "allowed": {
           "items": [
             "Operative—Ecclesiarchy§Battle Sister (Warrior)",
@@ -7339,20 +7106,27 @@
             "Operative—Ecclesiarchy§Battle Sister Superior"
           ]
         },
-        "keywords": {
-          "Tags": [
-            "ECCLESIARCHY"
-          ]
-        },
-        "removed": {
-          "rules": {}
-        },
         "rules": {
           "allowHeavyGunner": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{parent}",
+                    "tally",
+                    "Battle Sister Fire Team"
+                  ]
+                ],
+                "min": 2,
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
             "actions": [
               {
-                "actionType": "add",
-                "iterations": 1,
                 "paths": [
                   [
                     "{self}",
@@ -7360,38 +7134,26 @@
                     "items"
                   ]
                 ],
-                "value": "Operative—Ecclesiarchy§Battle Sister (Heavy Gunner)"
+                "actionType": "add",
+                "value": "Operative—Ecclesiarchy§Battle Sister (Heavy Gunner)",
+                "iterations": 1
               }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "min": 2,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{parent}",
-                    "tally",
-                    "Battle Sister Fire Team"
-                  ]
-                ]
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
+            ]
           }
         },
         "stats": {
           "Operative": {
-            "dynamic": false,
-            "max": 5,
-            "min": 5,
             "statType": "numeric",
-            "tracked": true,
             "value": 0,
-            "visibility": "active"
+            "visibility": "active",
+            "dynamic": false,
+            "tracked": true,
+            "min": 5,
+            "max": 5
           }
+        },
+        "removed": {
+          "rules": {}
         }
       },
       "Fire Team§Bloodletter Fire Team": {
@@ -7619,10 +7381,9 @@
         }
       },
       "Fire Team§Repentia Fire Team": {
-        "allowed": {
-          "items": [
-            "Operative—Ecclesiarchy§Sister Repentia",
-            "Operative—Ecclesiarchy§Repentia Superior"
+        "keywords": {
+          "Tags": [
+            "ECCLESIARCHY"
           ]
         },
         "assets": {
@@ -7634,20 +7395,21 @@
             "Operative—Ecclesiarchy§Sister Repentia"
           ]
         },
-        "keywords": {
-          "Tags": [
-            "ECCLESIARCHY"
+        "allowed": {
+          "items": [
+            "Operative—Ecclesiarchy§Sister Repentia",
+            "Operative—Ecclesiarchy§Repentia Superior"
           ]
         },
         "stats": {
           "Operative": {
-            "dynamic": false,
-            "max": 5,
-            "min": 5,
             "statType": "numeric",
-            "tracked": true,
             "value": 0,
-            "visibility": "active"
+            "visibility": "active",
+            "dynamic": false,
+            "tracked": true,
+            "min": 5,
+            "max": 5
           }
         }
       },
@@ -7779,13 +7541,6 @@
         "keywords": {
           "Keywords": [
             "Undivided"
-          ]
-        }
-      },
-      "Matched Roster§Matched Roster": {
-        "allowed": {
-          "classifications": [
-            "Operative"
           ]
         }
       },
@@ -7958,6 +7713,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -7969,27 +7745,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8015,6 +7770,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8026,27 +7802,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8074,6 +7829,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8085,33 +7867,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8168,6 +7923,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8179,27 +7955,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8228,6 +7983,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8239,27 +8015,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8287,6 +8042,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8298,27 +8074,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -8344,6 +8099,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8355,27 +8131,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8401,6 +8156,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8412,18 +8179,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -8449,6 +8204,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8460,18 +8227,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -8497,6 +8252,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8508,18 +8275,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -8545,6 +8300,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8556,18 +8323,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -8595,6 +8350,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8606,27 +8382,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8653,6 +8408,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8664,27 +8440,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8710,6 +8465,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8721,27 +8497,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -8768,6 +8523,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -8779,17 +8545,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -8815,6 +8570,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8826,27 +8602,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -8871,6 +8626,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8901,27 +8677,6 @@
             },
             "statType": "rank"
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
@@ -8946,6 +8701,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -8957,33 +8739,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9008,7 +8763,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -9021,25 +8788,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice."
+        }
       },
       "Operative—Brood Coven§Acolyte Hybrid (Leader)": {
         "keywords": {
@@ -9051,6 +8806,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9081,7 +8857,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -9111,28 +8886,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -9158,6 +8913,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9169,27 +8945,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9215,6 +8970,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9226,27 +9002,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9272,6 +9027,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9283,33 +9065,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9334,7 +9089,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -9347,25 +9114,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice."
+        }
       },
       "Operative—Brood Coven§Hybrid Metamorph (Leader)": {
         "keywords": {
@@ -9378,6 +9133,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9391,7 +9167,6 @@
             "value": 3
           },
           "Melee weapons": {
-            "dynamic": true,
             "ranks": {
               "Cult bonesword and metamorph mutations": {
                 "order": 1
@@ -9405,10 +9180,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -9430,28 +9205,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -9476,6 +9231,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9487,27 +9263,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9560,6 +9315,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9571,27 +9347,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9638,7 +9393,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -9650,17 +9417,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 5
@@ -9693,8 +9449,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note that this is not a modifier. In narrative play, this is cumulative with the Focused Battle Honour.\n\nUntil the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice."
+        }
       },
       "Operative—Brood Coven§Neophyte Hybrid (Leader) w/ long arm": {
         "assets": {
@@ -9711,6 +9466,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9722,33 +9504,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9793,6 +9548,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9834,7 +9616,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -9859,34 +9640,8 @@
                 "order": 2
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -9911,6 +9666,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -9922,27 +9698,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -9993,7 +9748,35 @@
             "T’au Empire"
           ]
         },
+        "text": "While this operative is in Cover, it has a Save characteristic of 4+.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10006,41 +9789,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "While this operative is in Cover, it has a Save characteristic of 4+."
+        }
       },
       "Operative—Cadre Mercenery§Kroot Carnivore (Warrior)": {
         "assets": {
@@ -10058,7 +9813,35 @@
             "Warrior"
           ]
         },
+        "text": "While this operative is in Cover, it has a Save characteristic of 4+.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10071,41 +9854,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "While this operative is in Cover, it has a Save characteristic of 4+."
+        }
       },
       "Operative—Cadre Mercenery§Kroot Hound": {
         "assets": {
@@ -10122,7 +9877,29 @@
             "Hound"
           ]
         },
+        "text": "While this operative is in Cover, it has a Save characteristic of 4+.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10135,35 +9912,13 @@
           "M": {
             "value": 4
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "While this operative is in Cover, it has a Save characteristic of 4+."
+        }
       },
       "Operative—Cadre Mercenery§Krootox": {
         "assets": {
@@ -10181,6 +9936,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -10192,33 +9974,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -10245,7 +10000,29 @@
             "Slaanesh"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10258,35 +10035,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Bloodletter (Fighter)": {
         "assets": {
@@ -10304,7 +10059,20 @@
             "Fighter"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10317,26 +10085,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Bloodletter (Horn Bearer)": {
         "assets": {
@@ -10355,7 +10110,20 @@
             "Horn Bearer"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10368,26 +10136,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Bloodletter (Icon Bearer)": {
         "assets": {
@@ -10406,7 +10161,20 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier.",
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10419,26 +10187,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier."
+        }
       },
       "Operative—Chaos Daemons§Bloodreaper": {
         "assets": {
@@ -10457,7 +10212,20 @@
             "Leader"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10470,26 +10238,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Blue Horror": {
         "assets": {
@@ -10506,7 +10261,29 @@
             "Blue Horror"
           ]
         },
+        "text": "This operative has a 6+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10519,35 +10296,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 6
           }
-        },
-        "text": "This operative has a 6+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Brimstone Horrors": {
         "assets": {
@@ -10564,6 +10319,7 @@
             "Brimstone Horrors"
           ]
         },
+        "text": "This operative has a 6+ invulnerable save.",
         "stats": {
           "APL": {
             "value": 2
@@ -10583,8 +10339,7 @@
           "W": {
             "value": 5
           }
-        },
-        "text": "This operative has a 6+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Daemonette (Fighter)": {
         "assets": {
@@ -10602,7 +10357,29 @@
             "Fighter"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10615,35 +10392,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Daemonette (Horn Bearer)": {
         "assets": {
@@ -10662,7 +10417,29 @@
             "Horn Bearer"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10675,35 +10452,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Daemonette (Icon Bearer)": {
         "assets": {
@@ -10722,7 +10477,29 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10735,35 +10512,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier."
+        }
       },
       "Operative—Chaos Daemons§Pink Horror (Fighter)": {
         "assets": {
@@ -10781,7 +10536,20 @@
             "Fighter"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10794,26 +10562,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Pink Horror (Horn Bearer)": {
         "assets": {
@@ -10832,7 +10587,20 @@
             "Horn Bearer"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10845,26 +10613,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Pink Horror (Icon Bearer)": {
         "assets": {
@@ -10883,7 +10638,20 @@
             "Icon Bearer"
           ]
         },
+        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10896,26 +10664,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "When determining control of an objective marker, treat this operative’s APL characteristic as being 1 higher. Note this is not a modifier."
+        }
       },
       "Operative—Chaos Daemons§Pink Horror Iridescent": {
         "assets": {
@@ -10935,7 +10690,20 @@
             "Tzeentch"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -10948,26 +10716,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Chaos Daemons§Plaguebearer (Fighter)": {
         "assets": {
@@ -10984,7 +10739,19 @@
             "Fighter"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -10997,25 +10764,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured."
+        }
       },
       "Operative—Chaos Daemons§Plaguebearer (Horn Bearer)": {
         "assets": {
@@ -11033,7 +10788,19 @@
             "Horn Bearer"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -11046,25 +10813,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured."
+        }
       },
       "Operative—Chaos Daemons§Plaguebearer (Icon Bearer)": {
         "assets": {
@@ -11082,7 +10837,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -11095,25 +10862,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured."
+        }
       },
       "Operative—Chaos Daemons§Plagueridden": {
         "assets": {
@@ -11130,7 +10885,19 @@
             "Plaguebearer"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -11143,25 +10910,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that wound is not lost. Other than the effects of Battle Scars, this operative cannot be injured."
+        }
       },
       "Operative—Commorrite§Hekatrix": {
         "assets": {
@@ -11177,7 +10932,29 @@
             "Wych"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11189,6 +10966,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 6
+          },
+          "W": {
+            "value": 9
           },
           "Melee weapon": {
             "dynamic": true,
@@ -11247,36 +11030,8 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 6
-          },
-          "W": {
-            "value": 9
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Commorrite§Kabalite (Gunner)": {
         "assets": {
@@ -11294,6 +11049,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11305,27 +11081,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -11366,6 +11121,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11377,18 +11144,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -11430,6 +11185,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11441,27 +11217,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -11486,6 +11241,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11497,6 +11279,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 9
           },
           "Melee weapon": {
             "dynamic": true,
@@ -11563,39 +11351,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 9
           }
         }
       },
@@ -11612,7 +11367,41 @@
             "Fighter"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11624,39 +11413,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -11682,8 +11438,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Commorrite§Wych (Warrior)": {
         "assets": {
@@ -11701,7 +11456,29 @@
             "Warrior"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11714,35 +11491,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Corsair Voidscarred§Fate Dealer": {
         "assets": {
@@ -11761,7 +11516,29 @@
             "Voidscarred Fate Dealer"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11774,35 +11551,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Felarch": {
         "assets": {
@@ -11819,7 +11574,35 @@
             "Voidscarred Felarch"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11831,33 +11614,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -11879,8 +11635,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Gunner": {
         "assets": {
@@ -11897,7 +11652,29 @@
             "Voidscarred Gunner"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11909,27 +11686,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -11952,8 +11708,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Heavy Gunner": {
         "assets": {
@@ -11970,7 +11725,29 @@
             "Voidscarred Heavy Gunner"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -11982,27 +11759,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12025,8 +11781,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Kurnathi": {
         "assets": {
@@ -12044,7 +11799,29 @@
             "Voidscarred Kurnathi"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12057,35 +11834,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Kurnite Hunter": {
         "assets": {
@@ -12103,7 +11858,29 @@
             "Voidscarred Kurnite Hunter"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12116,35 +11893,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Shade Runner": {
         "assets": {
@@ -12164,7 +11919,29 @@
             "Voidscarred Shade Runner"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12177,35 +11954,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Soul Weaver": {
         "assets": {
@@ -12226,7 +11981,29 @@
             "Medic"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12239,35 +12016,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Starstorm Duellist": {
         "assets": {
@@ -12287,7 +12042,29 @@
             "Voidscarred Starstorm Duellist"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12300,35 +12077,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Warrior": {
         "assets": {
@@ -12343,7 +12098,35 @@
             "Operative"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12355,33 +12138,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12403,8 +12159,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Corsair Voidscarred§Way Seeker": {
         "assets": {
@@ -12430,7 +12185,35 @@
             "Psyker"
           ]
         },
+        "text": "Each time this operative is activated, it can perform a free Dash action during that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12443,41 +12226,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative is activated, it can perform a free Dash action during that activation."
+        }
       },
       "Operative—Craftworld§Dire Avenger (Warrior)": {
         "assets": {
@@ -12494,7 +12249,41 @@
             "Warrior"
           ]
         },
+        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12507,47 +12296,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action."
+        }
       },
       "Operative—Craftworld§Dire Avenger Exarch w/ melee weapon": {
         "assets": {
@@ -12562,7 +12317,35 @@
             "Leader"
           ]
         },
+        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12596,7 +12379,6 @@
             "statType": "rank"
           },
           "Pistol or shield": {
-            "dynamic": true,
             "ranks": {
               "Shimmershield": {
                 "order": 1
@@ -12610,34 +12392,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 4
@@ -12645,8 +12401,7 @@
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action."
+        }
       },
       "Operative—Craftworld§Dire Avenger Exarch w/ ranged weapon": {
         "assets": {
@@ -12661,7 +12416,35 @@
             "Leader"
           ]
         },
+        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12673,33 +12456,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12722,8 +12478,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative performs an Overwatch action, for that action’s shooting attack, do not worsen the Ballistic Skill characteristic of its ranged weapon as a result of performing an Overwatch action."
+        }
       },
       "Operative—Craftworld§Guardian Defender (Heavy Gunner)": {
         "assets": {
@@ -12743,6 +12498,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12754,27 +12530,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12801,6 +12556,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12812,27 +12588,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12859,6 +12614,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12870,27 +12646,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -12978,7 +12733,29 @@
             "Ranger"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -12991,35 +12768,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Craftworld§Ranger (Warrior)": {
         "assets": {
@@ -13038,7 +12793,29 @@
             "Warrior"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13051,35 +12828,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Craftworld§Storm Guardian (Gunner)": {
         "assets": {
@@ -13097,6 +12852,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13108,27 +12884,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -13172,6 +12927,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13183,27 +12959,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -13230,6 +12985,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13241,27 +13017,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -13286,7 +13041,29 @@
             "Fighter"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -13319,35 +13096,13 @@
             },
             "statType": "rank"
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Plague Marine (Gunner)": {
         "assets": {
@@ -13364,7 +13119,29 @@
             "Gunner"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -13376,27 +13153,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -13432,8 +13188,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Plague Marine (Heavy Gunner)": {
         "assets": {
@@ -13450,7 +13205,29 @@
             "Heavy Gunner"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -13462,27 +13239,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -13505,13 +13261,13 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Plague Marine (Icon Bearer)": {
         "assets": {
           "traits": [
             "Weapons—Melee§Plague knife",
+            "Upgrade§Boltgun",
             "Abilities§Icon Bearer",
             "Unique Actions§Icon of Decay (1AP)"
           ]
@@ -13525,7 +13281,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 3
           },
@@ -13538,30 +13306,19 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Plague Marine (Warrior)": {
         "assets": {
           "traits": [
-            "Weapons—Melee§Plague knife"
+            "Weapons—Melee§Plague knife",
+            "Upgrade§Boltgun"
           ]
         },
         "keywords": {
@@ -13573,7 +13330,29 @@
             "Warrior"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -13586,35 +13365,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Plague Marine Champion": {
         "assets": {
@@ -13630,7 +13387,35 @@
             "Plague Marine"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -13643,8 +13428,13 @@
           "M": {
             "value": 2
           },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
+          },
           "Melee option": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -13674,10 +13464,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           },
           "Ranged option": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -13707,43 +13497,10 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
+            "statType": "rank",
+            "dynamic": true
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Death Guard§Poxwalker": {
         "assets": {
@@ -13759,6 +13516,7 @@
             "Poxwalker"
           ]
         },
+        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured.",
         "stats": {
           "APL": {
             "value": 2
@@ -13778,8 +13536,7 @@
           "W": {
             "value": 7
           }
-        },
-        "text": "Each time this operative would lose a wound, roll one D6: on a 5+, that would is not lost. This operative cannot be injured."
+        }
       },
       "Operative—Ecclesiarchy§Arco-flagellant": {
         "assets": {
@@ -13797,6 +13554,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13809,27 +13587,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
@@ -13839,10 +13596,6 @@
         }
       },
       "Operative—Ecclesiarchy§Battle Sister (Gunner)": {
-        "aspects": {
-          "Lock Qty": true,
-          "Unique": true
-        },
         "assets": {
           "traits": [
             "Upgrade§Gun butt"
@@ -13859,6 +13612,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13870,27 +13644,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -13931,13 +13684,13 @@
             },
             "statType": "rank"
           }
+        },
+        "aspects": {
+          "Unique": true,
+          "Lock Qty": true
         }
       },
       "Operative—Ecclesiarchy§Battle Sister (Heavy Gunner)": {
-        "aspects": {
-          "Lock Qty": true,
-          "Unique": true
-        },
         "assets": {
           "traits": [
             "Upgrade§Gun butt"
@@ -13954,6 +13707,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -13965,27 +13739,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -14013,15 +13766,20 @@
             },
             "statType": "rank"
           }
+        },
+        "aspects": {
+          "Unique": true,
+          "Lock Qty": true
         }
       },
       "Operative—Ecclesiarchy§Battle Sister (Icon Bearer)": {
         "aspects": {
-          "Lock Qty": true,
-          "Unique": true
+          "Unique": true,
+          "Lock Qty": true
         },
         "assets": {
           "traits": [
+            "Upgrade§Boltgun",
             "Upgrade§Gun butt",
             "Abilities§Icon Bearer",
             "Unique Actions§Icon of Purity (1AP)"
@@ -14038,6 +13796,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14050,27 +13829,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -14082,6 +13840,7 @@
       "Operative—Ecclesiarchy§Battle Sister (Warrior)": {
         "assets": {
           "traits": [
+            "Upgrade§Boltgun",
             "Upgrade§Gun butt"
           ]
         },
@@ -14096,6 +13855,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14108,27 +13888,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -14138,10 +13897,6 @@
         }
       },
       "Operative—Ecclesiarchy§Battle Sister Superior": {
-        "aspects": {
-          "Lock Qty": true,
-          "Unique": true
-        },
         "keywords": {
           "Keywords": [
             "Adepta Sororitas",
@@ -14154,6 +13909,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14222,7 +14004,7 @@
                 ]
               },
               "Boltgun": {
-                "order": 2,
+                "order": 1,
                 "traits": [
                   {
                     "trait": "Weapons—Ranged§Boltgun"
@@ -14230,7 +14012,7 @@
                 ]
               },
               "Combi-melta": {
-                "order": 3,
+                "order": 2,
                 "traits": [
                   {
                     "trait": "Weapons—Ranged§Combi-melta"
@@ -14238,7 +14020,7 @@
                 ]
               },
               "Combi-plasma": {
-                "order": 4,
+                "order": 3,
                 "traits": [
                   {
                     "trait": "Weapons—Ranged§Combi-plasma - Standard"
@@ -14246,28 +14028,10 @@
                 ]
               },
               "Condemnor boltgun": {
-                "order": 5,
-                "traits": [
-                  {
-                    "trait": {
-                      "item": "Weapons—Ranged§Boltgun",
-                      "stats": {
-                        "!": {
-                          "value": "MW1, P1"
-                        },
-                        "D": {
-                          "value": "3/3"
-                        },
-                        "WS/BS": {
-                          "value": "2"
-                        }
-                      }
-                    }
-                  }
-                ]
+                "order": 4
               },
               "Inferno pistol": {
-                "order": 6,
+                "order": 5,
                 "traits": [
                   {
                     "trait": "Weapons—Ranged§Inferno pistol"
@@ -14275,51 +14039,21 @@
                 ]
               },
               "Ministorum combi-flamer": {
-                "order": 7
+                "order": 6
               },
               "Ministorum hand-flamer": {
-                "order": 8
+                "order": 7
               },
               "Plasma pistol": {
-                "order": 9,
+                "order": 8,
                 "traits": [
                   {
-                    "trait": "Upgrade§Plasma pistol"
+                    "trait": "Weapons—Ranged§Plasma pistol - Standard"
                   }
                 ]
               }
             },
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "normal"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank"
           },
           "SV": {
             "value": 3
@@ -14327,7 +14061,12 @@
           "W": {
             "value": 8
           }
-        }
+        },
+        "aspects": {
+          "Unique": true,
+          "Lock Qty": true
+        },
+        "rules": {}
       },
       "Operative—Ecclesiarchy§Repentia Superior": {
         "assets": {
@@ -14347,10 +14086,28 @@
             "Superior"
           ]
         },
-        "removed": {
-          "rules": {}
-        },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14363,33 +14120,16 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 9
           }
+        },
+        "rules": {},
+        "removed": {
+          "rules": {}
         }
       },
       "Operative—Ecclesiarchy§Sister Repentia": {
@@ -14409,6 +14149,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14420,27 +14181,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -14469,6 +14209,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14480,27 +14241,6 @@
           },
           "M": {
             "value": 4
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -14529,6 +14269,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -14540,27 +14301,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -14591,6 +14331,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14602,33 +14369,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -14658,6 +14398,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14669,27 +14430,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -14718,6 +14458,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14729,27 +14490,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -14779,6 +14519,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14790,27 +14551,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -14836,6 +14576,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14847,27 +14608,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -14893,6 +14633,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14904,27 +14665,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -14952,6 +14692,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -14963,33 +14730,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15020,6 +14760,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15031,27 +14792,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15079,6 +14819,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15090,18 +14842,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
           },
           "SV": {
             "value": 5
@@ -15128,6 +14868,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15139,18 +14891,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -15177,6 +14917,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15188,18 +14940,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -15228,6 +14968,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15239,27 +15000,6 @@
           },
           "M": {
             "value": 4
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15286,6 +15026,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15297,6 +15064,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 5
+          },
+          "W": {
+            "value": 9
           },
           "Ranged weapon": {
             "dynamic": true,
@@ -15330,39 +15103,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 5
-          },
-          "W": {
-            "value": 9
           }
         }
       },
@@ -15386,6 +15126,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15397,18 +15149,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -15437,6 +15177,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15448,27 +15209,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15497,6 +15237,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15508,27 +15269,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15558,6 +15298,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15569,27 +15330,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15616,6 +15356,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15627,33 +15394,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15680,6 +15420,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15691,33 +15458,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -15744,7 +15484,29 @@
             "Bloatspawn"
           ]
         },
+        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15757,35 +15519,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 18
           }
-        },
-        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative."
+        }
       },
       "Operative—Gellerpox Infected§Cursemite": {
         "assets": {
@@ -15809,9 +15549,6 @@
           "DF": {
             "value": 2
           },
-          "EP": {
-            "value": 2
-          },
           "GA": {
             "value": 2
           },
@@ -15822,6 +15559,9 @@
             "value": 5
           },
           "W": {
+            "value": 2
+          },
+          "EP": {
             "value": 2
           }
         }
@@ -15849,9 +15589,6 @@
           "DF": {
             "value": 2
           },
-          "EP": {
-            "value": 2
-          },
           "GA": {
             "value": 2
           },
@@ -15862,6 +15599,9 @@
             "value": 5
           },
           "W": {
+            "value": 2
+          },
+          "EP": {
             "value": 2
           }
         }
@@ -15882,7 +15622,29 @@
             "Fleshscreamer"
           ]
         },
+        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15895,35 +15657,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 18
           }
-        },
-        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative."
+        }
       },
       "Operative—Gellerpox Infected§Gellerpox Mutant w/ heavy axe": {
         "assets": {
@@ -15940,7 +15680,29 @@
             "Gellerpox Mutant"
           ]
         },
+        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -15953,35 +15715,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 7
           }
-        },
-        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead."
+        }
       },
       "Operative—Gellerpox Infected§Gellerpox Mutant w/ improvised weapon": {
         "assets": {
@@ -15998,7 +15738,29 @@
             "Gellerpox Mutant"
           ]
         },
+        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16011,35 +15773,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 7
           }
-        },
-        "text": "Each time this operative fights in combat or a shooting attack is made against it, in the Resolve Successful Hits step of that combat or shooting attack, each time an attack dice would inflict Critical Damage on this operative, you can choose for that attack dice to inflict Normal Damage instead."
+        }
       },
       "Operative—Gellerpox Infected§Glitchling": {
         "assets": {
@@ -16059,6 +15799,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16070,18 +15822,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 5
@@ -16107,7 +15847,29 @@
             "Lumberghast"
           ]
         },
+        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16120,35 +15882,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 18
           }
-        },
-        "text": "Each time this operative would perform a mission action or the Pick Up action, you must subtract one additional action point to do so. Light terrain and operatives with a Wounds characteristic of 15 or less do not provide Cover for this operative."
+        }
       },
       "Operative—Gellerpox Infected§Sludge-grub": {
         "assets": {
@@ -16172,9 +15912,6 @@
           "DF": {
             "value": 2
           },
-          "EP": {
-            "value": 2
-          },
           "GA": {
             "value": 2
           },
@@ -16185,6 +15922,9 @@
             "value": 5
           },
           "W": {
+            "value": 2
+          },
+          "EP": {
             "value": 2
           }
         }
@@ -16209,6 +15949,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16220,27 +15981,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16263,6 +16003,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16274,6 +16035,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 13
           },
           "Melee weapon": {
             "dynamic": true,
@@ -16349,33 +16116,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 13
           }
         }
       },
@@ -16389,6 +16129,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16400,27 +16161,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16459,6 +16199,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16470,27 +16231,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16541,6 +16281,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16552,27 +16313,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16598,6 +16338,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16609,27 +16370,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16655,6 +16395,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16666,6 +16427,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 13
           },
           "Melee weapon": {
             "dynamic": true,
@@ -16691,33 +16458,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 13
           }
         }
       },
@@ -16737,6 +16477,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16748,27 +16509,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -16794,6 +16534,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16805,27 +16566,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -16851,6 +16591,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -16862,6 +16623,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 5
+          },
+          "W": {
+            "value": 11
           },
           "Ranged weapon": {
             "dynamic": true,
@@ -16890,33 +16657,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 5
-          },
-          "W": {
-            "value": 11
           }
         }
       },
@@ -16936,6 +16676,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -16966,27 +16727,6 @@
             },
             "statType": "rank"
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -17012,6 +16752,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -17023,33 +16790,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -17077,6 +16817,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -17088,33 +16855,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -17143,6 +16883,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17154,27 +16915,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -17201,9 +16941,52 @@
             "Necron"
           ]
         },
+        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
+          },
+          "DF": {
+            "value": 3
+          },
+          "GA": {
+            "value": 1
+          },
+          "M": {
+            "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
           },
           "Cryptek Actions": {
             "ranks": {
@@ -17222,48 +17005,6 @@
             },
             "statType": "rank"
           },
-          "DF": {
-            "value": 3
-          },
-          "GA": {
-            "value": 1
-          },
-          "M": {
-            "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
-          },
           "Weapon": {
             "dynamic": true,
             "ranks": {
@@ -17279,8 +17020,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative."
+        }
       },
       "Operative—Hierotek Circle§Deathmark": {
         "assets": {
@@ -17299,6 +17039,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17310,18 +17062,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 3
@@ -17349,6 +17089,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17360,27 +17121,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -17432,6 +17172,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17443,27 +17204,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -17517,7 +17257,20 @@
             "Accelerator"
           ]
         },
+        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment.",
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17530,26 +17283,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 5
           }
-        },
-        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment."
+        }
       },
       "Operative—Hierotek Circle§Plasmacyte Reanimator": {
         "assets": {
@@ -17570,7 +17310,20 @@
             "Reanimator"
           ]
         },
+        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment.",
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17583,26 +17336,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 5
           }
-        },
-        "text": "- While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).\n- This operative can perform the Fall Back action for one less action point (to a minimum of 0AP).\n- This operative cannot be equipped with equipment."
+        }
       },
       "Operative—Hierotek Circle§Psychomancer": {
         "assets": {
@@ -17622,9 +17362,52 @@
             "Psychomancer"
           ]
         },
+        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
+          },
+          "DF": {
+            "value": 3
+          },
+          "GA": {
+            "value": 1
+          },
+          "M": {
+            "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
           },
           "Cryptek Actions": {
             "ranks": {
@@ -17642,51 +17425,8 @@
               }
             },
             "statType": "rank"
-          },
-          "DF": {
-            "value": 3
-          },
-          "GA": {
-            "value": 1
-          },
-          "M": {
-            "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
           }
-        },
-        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative."
+        }
       },
       "Operative—Hierotek Circle§Technomancer": {
         "assets": {
@@ -17706,9 +17446,52 @@
             "Technomancer"
           ]
         },
+        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
+          },
+          "DF": {
+            "value": 3
+          },
+          "GA": {
+            "value": 1
+          },
+          "M": {
+            "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
           },
           "Cryptek Actions": {
             "ranks": {
@@ -17726,51 +17509,8 @@
               }
             },
             "statType": "rank"
-          },
-          "DF": {
-            "value": 3
-          },
-          "GA": {
-            "value": 1
-          },
-          "M": {
-            "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
           }
-        },
-        "text": "Each time this operative makes a shooting attack if a friendly APPRENTEK operative has an Engage order and is Visible to this operative, in the Select Valid Target step of that shooting attack, you can treat that friendly APPRENTEK operative as the active operative for the purposes of determining Line of Sight. If you do so, in the Roll Attack Dice step of that shooting attack, you can re-roll any or all of your attack dice results of one result (e.g. results of 2).\n\nSelect one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative."
+        }
       },
       "Operative—Hive Fleet§Genestealer (Leader) w/ double rending claws": {
         "assets": {
@@ -17787,7 +17527,29 @@
             "Tyranid"
           ]
         },
+        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17800,35 +17562,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hive Fleet§Genestealer (Leader) w/ rending claws and scything talons": {
         "assets": {
@@ -17846,7 +17586,29 @@
             "Tyranid"
           ]
         },
+        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17859,35 +17621,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hive Fleet§Genestealer w/ double rending claws": {
         "assets": {
@@ -17904,7 +17644,29 @@
             "Fighter"
           ]
         },
+        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17917,35 +17679,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hive Fleet§Genestealer w/ rending claws and scything talons": {
         "assets": {
@@ -17962,7 +17702,29 @@
             "Fighter"
           ]
         },
+        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -17975,35 +17737,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hive Fleet§Hormagaunt": {
         "assets": {
@@ -18021,6 +17761,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18032,27 +17793,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -18079,6 +17819,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18090,27 +17851,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -18137,6 +17877,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18148,27 +17909,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -18195,6 +17935,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18206,27 +17967,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -18251,7 +17991,35 @@
             "Fighter"
           ]
         },
+        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18264,33 +18032,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
@@ -18298,7 +18039,6 @@
             "value": 18
           },
           "Weapon 1": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -18355,10 +18095,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           },
           "Weapon 2": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -18391,10 +18131,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
-        },
-        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics."
+        }
       },
       "Operative—Hive Fleet§Tyranid Warrior (Heavy Gunner)": {
         "assets": {
@@ -18412,6 +18152,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18423,27 +18184,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -18466,7 +18206,6 @@
             "statType": "rank"
           },
           "Weapon 2": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -18499,7 +18238,8 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -18518,7 +18258,35 @@
             "Tyranid Warrior"
           ]
         },
+        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18531,33 +18299,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
@@ -18565,7 +18306,6 @@
             "value": 19
           },
           "Weapon 1": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -18622,10 +18362,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           },
           "Weapon 2": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -18658,10 +18398,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
-        },
-        "text": "If this operative is equipped with two melee weapons, add 1 to their Attacks characteristics."
+        }
       },
       "Operative—Hunter Cadre§DS8 Tactical Support Turret": {
         "assets": {
@@ -18680,6 +18420,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 1
           },
@@ -18690,29 +18451,8 @@
             "value": 1
           },
           "M": {
-            "statType": "term",
-            "value": "-"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
+            "value": "-",
+            "statType": "term"
           },
           "SV": {
             "value": 4
@@ -18752,6 +18492,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18763,27 +18524,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -18842,6 +18582,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18853,18 +18605,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -18926,6 +18666,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -18937,33 +18704,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -18991,6 +18731,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19002,18 +18754,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -19041,6 +18781,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19052,27 +18813,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -19101,6 +18841,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19112,27 +18873,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -19161,6 +18901,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -19172,17 +18923,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -19210,6 +18950,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -19221,17 +18972,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -19258,6 +18998,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19269,27 +19030,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -19315,6 +19055,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19326,27 +19087,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -19387,6 +19127,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19398,27 +19159,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -19446,6 +19186,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19457,27 +19218,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -19503,7 +19243,29 @@
             "Shas’ui"
           ]
         },
+        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19515,27 +19277,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -19568,8 +19309,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hunter Cadre§Stealth Battlesuit Shas’vre": {
         "assets": {
@@ -19587,7 +19327,29 @@
             "T’au"
           ]
         },
+        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19599,27 +19361,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -19652,8 +19393,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Each time an enemy operative makes a shooting attack, unless it is within ⬤ of this operative or it is a subsequent attack made as a result of the Blast special rule, this operative is always treated as being in Cover for that shooting attack. While this operative has a Conceal order, it is always treated as having a Conceal order, regardless of any other rules (e.g. Vantage Point)."
+        }
       },
       "Operative—Hunter Clade§Sicarian Infiltrator Princeps": {
         "assets": {
@@ -19674,6 +19414,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19685,6 +19452,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 11
           },
           "Melee weapon": {
             "dynamic": true,
@@ -19735,39 +19508,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 11
           }
         }
       },
@@ -19787,6 +19527,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19798,6 +19565,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 10
           },
           "Melee weapon": {
             "dynamic": true,
@@ -19848,39 +19621,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 10
           }
         }
       },
@@ -19899,7 +19639,29 @@
             "Assassin"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19912,27 +19674,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
@@ -19940,7 +19681,6 @@
             "value": 10
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -19962,10 +19702,10 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Hunter Clade§Sicarian Ruststalker Princeps": {
         "assets": {
@@ -19985,7 +19725,29 @@
             "Skitarii"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -19998,35 +19760,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 11
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defense Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Hunter Clade§Skitarii Ranger Alpha": {
         "assets": {
@@ -20046,6 +19786,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20057,27 +19818,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -20131,6 +19871,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20142,18 +19894,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -20181,6 +19921,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20192,27 +19953,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -20273,6 +20013,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20284,27 +20045,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -20332,6 +20072,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20343,18 +20095,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -20382,7 +20122,29 @@
             "Vanguard"
           ]
         },
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20394,27 +20156,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -20448,8 +20189,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability)."
+        }
       },
       "Operative—Hunter Clade§Skitarii Vanguard Diktat": {
         "assets": {
@@ -20468,7 +20208,19 @@
             "Diktat"
           ]
         },
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).\n\nSelect one friendly HUNTER CLADE operative Visible to and within ⬟ of this operative. Add 1 to its APL. This operative cannot perform this action while within Engagement Range of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -20481,25 +20233,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 7
           }
-        },
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).\n\nSelect one friendly HUNTER CLADE operative Visible to and within ⬟ of this operative. Add 1 to its APL. This operative cannot perform this action while within Engagement Range of an enemy operative."
+        }
       },
       "Operative—Hunter Clade§Skitarii Vanguard Gunner": {
         "assets": {
@@ -20517,7 +20257,29 @@
             "Gunner"
           ]
         },
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20529,27 +20291,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -20590,8 +20331,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability)."
+        }
       },
       "Operative—Hunter Clade§Skitarii Vanguard Shocktrooper": {
         "assets": {
@@ -20610,7 +20350,29 @@
             "Shocktrooper"
           ]
         },
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20623,35 +20385,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 7
           }
-        },
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability)."
+        }
       },
       "Operative—Hunter Clade§Skitarii Vanguard Surveyor": {
         "assets": {
@@ -20670,7 +20410,19 @@
             "Surveyor"
           ]
         },
+        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).\n\nSelect one friendly HUNTER CLADE operative Visible to and within ⬛ of this operative, then select one enemy operative. Until the end of the Turning Point, each time that friendly model makes a shooting attack, for that shooting attack:\n- Areas of smoke have no effect when determining line of sight.\n- That enemy operative is not obscured.\n- If that enemy operative is the target, that friendly operative’s ranged weapons have the No Cover special rule.\n\nThis operative cannot perform this action while within Engagement Range of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -20683,25 +20435,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 7
           }
-        },
-        "text": "While an enemy operative is Visible to and within ⬤ of friendly operatives with this ability, that enemy operative is treated as being injured (only subtract ⬤ from that enemy operative’s Movement characteristic as a result of being injured if it is activated, Visible to and within ⬤ of friendly operatives with this ability).\n\nSelect one friendly HUNTER CLADE operative Visible to and within ⬛ of this operative, then select one enemy operative. Until the end of the Turning Point, each time that friendly model makes a shooting attack, for that shooting attack:\n- Areas of smoke have no effect when determining line of sight.\n- That enemy operative is not obscured.\n- If that enemy operative is the target, that friendly operative’s ranged weapons have the No Cover special rule.\n\nThis operative cannot perform this action while within Engagement Range of an enemy operative."
+        }
       },
       "Operative—Imperial Guard§Guardsman (Comms)": {
         "assets": {
@@ -20722,6 +20462,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20733,27 +20494,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -20779,6 +20519,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20790,18 +20542,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -20828,6 +20568,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20839,18 +20591,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -20877,6 +20617,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20888,18 +20640,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -20926,6 +20666,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20937,18 +20689,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -20975,6 +20715,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -20986,18 +20738,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -21024,6 +20764,24 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21035,24 +20793,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -21076,7 +20816,35 @@
             "Sergeant"
           ]
         },
+        "text": "Each time you use one of the Strategic Ploys, it takes effect as a Guardsman Order. All friendly TEMPESTUS SCION operative and all friendly GUARDSMAN operatives within ⬟ of and Visible to a friendly GUARDSMAN SERGEANT operative are issued that order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21088,6 +20856,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 5
+          },
+          "W": {
+            "value": 8
           },
           "Melee weapon": {
             "dynamic": true,
@@ -21112,7 +20886,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -21142,43 +20915,10 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 5
-          },
-          "W": {
-            "value": 8
+            "statType": "rank",
+            "dynamic": true
           }
-        },
-        "text": "Each time you use one of the Strategic Ploys, it takes effect as a Guardsman Order. All friendly TEMPESTUS SCION operative and all friendly GUARDSMAN operatives within ⬟ of and Visible to a friendly GUARDSMAN SERGEANT operative are issued that order."
+        }
       },
       "Operative—Imperial Guard§Tempestor": {
         "assets": {
@@ -21197,6 +20937,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21208,6 +20975,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 4
+          },
+          "W": {
+            "value": 9
           },
           "Melee weapon": {
             "dynamic": true,
@@ -21243,7 +21016,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -21273,40 +21045,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 4
-          },
-          "W": {
-            "value": 9
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -21328,6 +21068,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21339,27 +21100,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -21385,6 +21125,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21396,18 +21148,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -21434,6 +21174,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21445,18 +21197,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -21483,6 +21223,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21494,18 +21246,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -21532,6 +21272,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21543,18 +21295,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -21581,6 +21321,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21592,18 +21344,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -21630,6 +21370,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21641,27 +21402,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -21688,6 +21428,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21699,27 +21460,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -21748,6 +21488,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21759,27 +21520,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -21803,6 +21543,7 @@
             "C.A.T. Unit"
           ]
         },
+        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything.",
         "stats": {
           "APL": {
             "value": 1
@@ -21822,8 +21563,7 @@
           "W": {
             "value": 5
           }
-        },
-        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything."
+        }
       },
       "Operative—Imperial Navy Breacher§Endurant": {
         "assets": {
@@ -21844,6 +21584,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -21855,17 +21606,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 2
@@ -21890,6 +21630,7 @@
             "Gheistskull"
           ]
         },
+        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything.",
         "stats": {
           "APL": {
             "value": 1
@@ -21909,8 +21650,7 @@
           "W": {
             "value": 5
           }
-        },
-        "text": "This operative cannot:\n- Perform any actions other than Dash, Fall Back, Normal Move or Pass.\n- Climb, jump or traverse.\n- Make shooting attacks, fight in combat (do not select a weapon or roll any attack dice for it) or provide combat support.\n- Be equipped with equipment or carry anything."
+        }
       },
       "Operative—Imperial Navy Breacher§Grenadier": {
         "assets": {
@@ -21934,6 +21674,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -21945,17 +21696,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -21982,6 +21722,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -21993,27 +21754,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -22040,6 +21780,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22051,27 +21812,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -22098,6 +21838,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22109,27 +21870,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -22159,6 +21899,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22170,27 +21931,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -22217,6 +21957,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22228,33 +21995,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -22306,6 +22046,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22317,18 +22069,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -22357,6 +22097,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22368,18 +22120,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -22407,7 +22147,29 @@
             "Grenadier"
           ]
         },
+        "text": "This operative can perform two Fight actions during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22420,35 +22182,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 14
           }
-        },
-        "text": "This operative can perform two Fight actions during its activation."
+        }
       },
       "Operative—Intercession Squad§Assault Intercessor Sergeant": {
         "assets": {
@@ -22464,7 +22204,29 @@
             "Sergeant"
           ]
         },
+        "text": "This operative can perform two Fight actions during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22476,6 +22238,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 15
           },
           "Melee weapon": {
             "dynamic": true,
@@ -22550,36 +22318,8 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 15
           }
-        },
-        "text": "This operative can perform two Fight actions during its activation."
+        }
       },
       "Operative—Intercession Squad§Assault Intercessor Warrior": {
         "assets": {
@@ -22597,7 +22337,29 @@
             "Warrior"
           ]
         },
+        "text": "This operative can perform two Fight actions during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22610,35 +22372,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 14
           }
-        },
-        "text": "This operative can perform two Fight actions during its activation."
+        }
       },
       "Operative—Intercession Squad§Intercessor Gunner": {
         "assets": {
@@ -22656,7 +22396,29 @@
             "Gunner"
           ]
         },
+        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22668,27 +22430,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -22729,8 +22470,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks."
+        }
       },
       "Operative—Intercession Squad§Intercessor Sergeant": {
         "assets": {
@@ -22746,7 +22486,29 @@
             "Sergeant"
           ]
         },
+        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22758,6 +22520,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 15
           },
           "Melee weapon": {
             "dynamic": true,
@@ -22840,36 +22608,8 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 15
           }
-        },
-        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks."
+        }
       },
       "Operative—Intercession Squad§Intercessor Warrior": {
         "assets": {
@@ -22886,7 +22626,29 @@
             "Warrior"
           ]
         },
+        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -22898,27 +22660,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -22959,8 +22700,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "This operative can perform two Shoot actions during its activation if a bolt weapon is selected for at least one of those shooting attacks."
+        }
       },
       "Operative—Kasrkin§Combat Medic": {
         "assets": {
@@ -22982,6 +22722,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -22993,27 +22754,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -23043,6 +22783,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -23054,17 +22805,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -23091,6 +22831,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23102,18 +22854,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23140,6 +22880,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23151,18 +22903,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23189,6 +22929,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23200,18 +22952,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23238,6 +22978,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23249,18 +23001,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23287,6 +23027,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23298,18 +23050,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23338,6 +23078,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23349,27 +23110,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -23396,6 +23136,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23407,33 +23174,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -23481,6 +23221,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23492,18 +23244,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -23531,6 +23271,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23542,27 +23303,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -23590,6 +23330,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23601,27 +23362,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -23682,7 +23422,35 @@
             "Kommando Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23695,41 +23463,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Breacha Boy": {
         "assets": {
@@ -23747,7 +23487,29 @@
             "Breacha Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23760,35 +23522,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Burna Boy": {
         "assets": {
@@ -23804,7 +23544,29 @@
             "Burna Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23817,35 +23579,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Comms Boy": {
         "assets": {
@@ -23863,7 +23603,29 @@
             "Comms Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23876,35 +23638,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Dakka Boy": {
         "assets": {
@@ -23922,7 +23662,29 @@
             "Dakka Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23935,35 +23697,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Grot": {
         "assets": {
@@ -23980,7 +23720,20 @@
             "Kommando Grot"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -23993,26 +23746,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 5
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Nob w/ big choppa": {
         "assets": {
@@ -24029,7 +23769,29 @@
             "Ork"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -24042,35 +23804,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 13
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Nob w/ power klaw": {
         "assets": {
@@ -24087,7 +23827,29 @@
             "Ork"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -24100,35 +23862,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 13
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Rokkit Boy": {
         "assets": {
@@ -24145,7 +23885,20 @@
             "Rokkit Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -24158,26 +23911,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Slasha Boy": {
         "assets": {
@@ -24194,7 +23934,35 @@
             "Slasha Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -24207,41 +23975,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Kommando§Snipa Boy": {
         "assets": {
@@ -24259,7 +23999,20 @@
             "Snipa Boy"
           ]
         },
+        "text": "This operative can perform a Charge action while it has a Conceal order.",
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -24272,26 +24025,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "This operative can perform a Charge action while it has a Conceal order."
+        }
       },
       "Operative—Legionary§Anointed": {
         "assets": {
@@ -24310,6 +24050,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24321,33 +24088,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24374,6 +24114,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24385,6 +24152,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
           },
           "Melee weapon": {
             "dynamic": true,
@@ -24423,7 +24196,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -24445,40 +24217,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -24510,6 +24250,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24521,33 +24288,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24574,6 +24314,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24585,27 +24346,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24634,6 +24374,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24646,8 +24413,13 @@
           "M": {
             "value": 3
           },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
+          },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -24669,40 +24441,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -24721,6 +24461,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24732,27 +24493,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24810,6 +24550,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24821,27 +24582,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24895,6 +24635,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24906,33 +24673,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -24975,6 +24715,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -24986,27 +24747,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -25029,6 +24769,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -25040,33 +24807,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -25107,6 +24847,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25118,27 +24879,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25167,6 +24907,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25178,18 +24930,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -25215,6 +24955,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25226,27 +24987,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25272,6 +25012,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25283,27 +25044,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25332,6 +25072,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25343,27 +25104,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25389,6 +25129,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25400,33 +25167,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25452,6 +25192,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25463,33 +25230,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25517,6 +25257,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25528,27 +25289,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25575,6 +25315,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25586,27 +25347,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25634,6 +25374,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25645,27 +25406,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25692,6 +25432,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25703,27 +25464,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25751,6 +25491,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25762,27 +25523,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -25808,6 +25548,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25820,33 +25587,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -25854,7 +25594,6 @@
             "value": 8
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -25874,7 +25613,8 @@
                 "order": 3
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -25898,6 +25638,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25909,27 +25670,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -25955,6 +25695,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -25966,33 +25733,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -26019,6 +25759,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26030,18 +25782,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 5
@@ -26069,6 +25809,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26080,27 +25841,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -26127,6 +25867,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26138,18 +25890,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -26179,6 +25919,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26190,33 +25957,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -26244,6 +25984,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26255,27 +26016,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -26304,6 +26044,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26315,18 +26067,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -26354,6 +26094,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26365,27 +26126,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -26414,6 +26154,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26425,27 +26186,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -26473,6 +26213,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -26484,17 +26235,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 4
@@ -26522,6 +26262,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26533,27 +26294,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -26579,6 +26319,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26590,27 +26351,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -26639,6 +26379,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26650,27 +26411,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -26698,6 +26438,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26709,27 +26470,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -26754,6 +26494,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -26765,18 +26517,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -26819,7 +26559,29 @@
             "Marksman"
           ]
         },
+        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -26832,35 +26594,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Incursor Minelayer": {
         "assets": {
@@ -26881,7 +26621,29 @@
             "Minelayer"
           ]
         },
+        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -26894,35 +26656,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Incursor Sergeant": {
         "assets": {
@@ -26942,7 +26682,29 @@
             "Sergeant"
           ]
         },
+        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nYou gain 1CP. This operative cannot perform this action while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -26955,35 +26717,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 13
           }
-        },
-        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nYou gain 1CP. This operative cannot perform this action while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Incursor Warrior": {
         "assets": {
@@ -27002,7 +26742,29 @@
             "Warrior"
           ]
         },
+        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27015,35 +26777,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "When determining if an intended target is in this operative’s Line of Sight:\n- The intended target cannot be Obscured.\n- Areas of smoke (e.g. smoke grenade) have no effect.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Commsman": {
         "assets": {
@@ -27063,7 +26803,29 @@
             "Commsman"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27076,35 +26838,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Helix Adept": {
         "assets": {
@@ -27126,7 +26866,29 @@
             "Medic"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27139,35 +26901,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Saboteur": {
         "assets": {
@@ -27188,7 +26928,29 @@
             "Saboteur"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27201,35 +26963,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Sergeant": {
         "assets": {
@@ -27249,7 +26989,29 @@
             "Sergeant"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nYou gain 1CP. This operative cannot perform this action while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27262,35 +27024,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 13
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nYou gain 1CP. This operative cannot perform this action while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Veteran": {
         "assets": {
@@ -27309,7 +27049,29 @@
             "Veteran"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27322,35 +27084,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Voxbreaker": {
         "assets": {
@@ -27371,7 +27111,29 @@
             "Voxbreaker"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27384,35 +27146,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Infiltrator Warrior": {
         "assets": {
@@ -27431,7 +27171,29 @@
             "Warrior"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27444,35 +27206,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy or pass, if any friendly operatives with this ability are in the killzone, you can use this ability instead. If you do so, select one enemy operative Visible to any friendly operative with this ability; in the following Firefight phase, that enemy operative is treated as having a Group Activation characteristic of 1, and cannot be activated or perform actions until one of the following is true:\n- A number of enemy operatives have been activated equal to the number of friendly operatives with this ability in the kill zone at the start of the phase,\n- It is the last enemy operative to be activated.\n\nChange this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
+        }
       },
       "Operative—Phobos Strike Team§Reiver Sergeant": {
         "assets": {
@@ -27490,6 +27230,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27501,33 +27268,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -27568,6 +27308,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27579,33 +27346,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -27648,6 +27388,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27659,27 +27420,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -27705,6 +27445,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27716,6 +27477,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 14
           },
           "Melee weapon": {
             "dynamic": true,
@@ -27790,33 +27557,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 14
           }
         }
       },
@@ -27832,6 +27572,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27843,27 +27604,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -27894,6 +27634,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -27905,27 +27666,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28008,6 +27748,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28019,27 +27780,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28100,6 +27840,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28111,33 +27878,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28167,6 +27907,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28178,33 +27945,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28239,6 +27979,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -28250,27 +28011,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28320,6 +28060,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -28331,27 +28092,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28412,6 +28152,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -28423,27 +28184,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28504,6 +28244,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28515,27 +28276,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28564,6 +28304,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28575,27 +28336,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28623,6 +28363,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28634,27 +28395,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28683,6 +28423,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28694,27 +28455,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28741,6 +28481,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28752,27 +28513,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -28831,6 +28571,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -28842,6 +28603,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 14
           },
           "Melee weapon": {
             "dynamic": true,
@@ -28948,33 +28715,6 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 14
           }
         }
       },
@@ -28995,6 +28735,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29007,33 +28774,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -29041,7 +28781,6 @@
             "value": 12
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "Bolt carbine and fists": {
                 "order": 1
@@ -29055,7 +28794,8 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -29077,6 +28817,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29089,33 +28856,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
@@ -29123,7 +28863,6 @@
             "value": 13
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "Bolt carbine": {
                 "order": 1,
@@ -29134,7 +28873,8 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -29154,6 +28894,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29166,27 +28927,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
@@ -29194,7 +28934,6 @@
             "value": 8
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -29216,7 +28955,8 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -29231,6 +28971,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29242,18 +28994,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 4
@@ -29292,6 +29032,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29303,33 +29070,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -29372,7 +29112,29 @@
             "Sniper"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your attack dice, if this operative is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29385,35 +29147,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your attack dice, if this operative is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Space Marine§Scout Sniper Sergeant": {
         "assets": {
@@ -29432,7 +29172,29 @@
             "SPACE MARINE"
           ]
         },
+        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your attack dice, if this operative is in Cover, one additional dice can be retained as a successful normal save as a result of Cover.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29445,35 +29207,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "Each time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your attack dice, if this operative is in Cover, one additional dice can be retained as a successful normal save as a result of Cover."
+        }
       },
       "Operative—Space Marine§Tactical Marine (Gunner)": {
         "assets": {
@@ -29491,6 +29231,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29502,27 +29263,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -29589,6 +29329,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29600,27 +29361,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -29658,7 +29398,8 @@
       "Operative—Space Marine§Tactical Marine (Warrior)": {
         "assets": {
           "traits": [
-            "Weapons—Melee§Fists"
+            "Weapons—Melee§Fists",
+            "Upgrade§Boltgun"
           ]
         },
         "keywords": {
@@ -29671,6 +29412,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29682,27 +29444,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -29727,6 +29468,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29738,33 +29506,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -29792,7 +29533,41 @@
             "Warrior"
           ]
         },
+        "text": "Other than the effects of Battle Scars, this operative cannot be injured. You can ignore any or all modifiers to this operative’s APL and it is not affected by the Stun critical rule.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29804,39 +29579,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 2
@@ -29864,8 +29606,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Other than the effects of Battle Scars, this operative cannot be injured. You can ignore any or all modifiers to this operative’s APL and it is not affected by the Stun critical rule."
+        }
       },
       "Operative—Talons of the Emperor§Custodian Guard (Warrior)": {
         "assets": {
@@ -29880,7 +29621,41 @@
             "Warrior"
           ]
         },
+        "text": "Other than the effects of Battle Scars, this operative cannot be injured. You can ignore any or all modifiers to this operative’s APL and it is not affected by the Stun critical rule.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -29892,39 +29667,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 2
@@ -29952,12 +29694,12 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "Other than the effects of Battle Scars, this operative cannot be injured. You can ignore any or all modifiers to this operative’s APL and it is not affected by the Stun critical rule."
+        }
       },
       "Operative—Talons of the Emperor§Sister of Silence Prosecutor": {
         "assets": {
           "traits": [
+            "Upgrade§Boltgun",
             "Upgrade§Gun butt"
           ]
         },
@@ -29970,7 +29712,35 @@
             "Prosecutor"
           ]
         },
+        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -29983,41 +29753,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions."
+        }
       },
       "Operative—Talons of the Emperor§Sister of Silence Superior": {
         "keywords": {
@@ -30030,7 +29772,29 @@
             "TALONS OF THE EMPEROR"
           ]
         },
+        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30042,27 +29806,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -30103,8 +29846,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions."
+        }
       },
       "Operative—Talons of the Emperor§Sister of Silence Vigilator": {
         "assets": {
@@ -30121,7 +29863,29 @@
             "Vigilator"
           ]
         },
+        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30134,35 +29898,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions."
+        }
       },
       "Operative—Talons of the Emperor§Sister of Silence Witchseeker": {
         "assets": {
@@ -30179,7 +29921,29 @@
             "Witchseeker"
           ]
         },
+        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30192,35 +29956,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "While an operative is within ⬟ of an ANATHEMA PSYKANA operative, it cannot perform psychic actions. SISTER OF SILENCE operatives cannot be targeted or affected by psychic actions."
+        }
       },
       "Operative—Tomb World§Deathmark": {
         "assets": {
@@ -30237,7 +29979,29 @@
             "Warrior"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30250,35 +30014,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Deathmark (Leader)": {
         "assets": {
@@ -30296,7 +30038,29 @@
             "Warrior"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30309,35 +30073,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 11
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Flayed One": {
         "assets": {
@@ -30353,7 +30095,29 @@
             "Warrior"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30366,35 +30130,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Flayed One (Leader)": {
         "assets": {
@@ -30410,7 +30152,29 @@
             "TOMB WORLD"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30423,35 +30187,13 @@
           "M": {
             "value": 2
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 4
           },
           "W": {
             "value": 10
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Immortal": {
         "assets": {
@@ -30467,7 +30209,29 @@
             "Warrior"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30479,27 +30243,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -30532,8 +30275,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Immortal (Leader)": {
         "assets": {
@@ -30549,7 +30291,29 @@
             "TOMB WORLD"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30561,27 +30325,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -30614,8 +30357,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Tomb World§Necron Warrior": {
         "assets": {
@@ -30630,7 +30372,29 @@
             "Necron Warrior"
           ]
         },
+        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30642,27 +30406,6 @@
           },
           "M": {
             "value": 2
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -30685,8 +30428,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "In the Ready Operatives step of each Turning Point, this operative regains up to 2 lost wounds."
+        }
       },
       "Operative—Traitor Space Marine§Aspiring Champion": {
         "assets": {
@@ -30703,6 +30445,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -30714,33 +30483,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -30777,6 +30519,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30788,33 +30557,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -30852,6 +30594,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30864,27 +30627,6 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
@@ -30892,7 +30634,6 @@
             "value": 7
           },
           "Weapons": {
-            "dynamic": true,
             "ranks": {
               "Flamer": {
                 "order": 1,
@@ -30911,7 +30652,8 @@
                 ]
               }
             },
-            "statType": "rank"
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -30929,6 +30671,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -30940,33 +30709,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31009,6 +30751,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -31020,27 +30783,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -31099,6 +30841,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -31110,27 +30873,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -31182,6 +30924,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -31193,33 +30962,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -31257,6 +30999,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -31268,33 +31037,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 3
@@ -31336,6 +31078,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31347,27 +31110,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31395,6 +31137,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31406,27 +31169,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31450,7 +31192,35 @@
             "Confidant Veteran"
           ]
         },
+        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31464,7 +31234,6 @@
             "value": 3
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -31486,34 +31255,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -31521,8 +31264,7 @@
           "W": {
             "value": 7
           }
-        },
-        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation."
+        }
       },
       "Operative—Veteran Guardsman§Confidant Veteran w/ rifle": {
         "assets": {
@@ -31538,7 +31280,35 @@
             "Confidant Veteran"
           ]
         },
+        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31552,7 +31322,6 @@
             "value": 3
           },
           "Rifle": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -31574,34 +31343,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -31609,8 +31352,7 @@
           "W": {
             "value": 7
           }
-        },
-        "text": "Each time this operative is activated, if it has not been nominated for command, you can select one other ready friendly VETERAN GUARDSMAN operative within ⬟ of and Visible to it. After this operative’s activation ends, activate that operative, and treat its Group Activation characteristic as 1 for that activation."
+        }
       },
       "Operative—Veteran Guardsman§Demolition Veteran": {
         "assets": {
@@ -31630,6 +31372,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31641,27 +31404,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31686,6 +31428,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31697,18 +31451,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -31734,6 +31476,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31745,18 +31499,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -31782,6 +31524,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31793,18 +31547,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -31830,6 +31572,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31841,18 +31595,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -31880,6 +31622,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31891,27 +31654,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31939,6 +31681,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -31950,27 +31713,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -31995,7 +31737,35 @@
             "VETERAN GUARDSMAN"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy, if this operative is in the killzone, it can issue a Guardsman Order: if it does, all friendly VETERAN GUARDSMAN operatives within ⬟ of and Visible to it are issued a Guardsman Order.\n\nEach time a friendly operative issues a Guardsman Order, select one Guardsman Order to take effect until the end of the Turning Point.\n\nIf more than one Guardsmen Order could be issued by your kill team during the Turning Point, e.g. the Inspirational Leadership Tactical Ploy (pg 45), they must be different Guardsmen Orders.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32008,41 +31778,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 5
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy, if this operative is in the killzone, it can issue a Guardsman Order: if it does, all friendly VETERAN GUARDSMAN operatives within ⬟ of and Visible to it are issued a Guardsman Order.\n\nEach time a friendly operative issues a Guardsman Order, select one Guardsman Order to take effect until the end of the Turning Point.\n\nIf more than one Guardsmen Order could be issued by your kill team during the Turning Point, e.g. the Inspirational Leadership Tactical Ploy (pg 45), they must be different Guardsmen Orders."
+        }
       },
       "Operative—Veteran Guardsman§Sergeant Veteran w/ pistol and melee weapon": {
         "assets": {
@@ -32057,7 +31799,35 @@
             "VETERAN GUARDSMAN"
           ]
         },
+        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy, if this operative is in the killzone, it can issue a Guardsman Order: if it does, all friendly VETERAN GUARDSMAN operatives within ⬟ of and Visible to it are issued a Guardsman Order.\n\nEach time a friendly operative issues a Guardsman Order, select one Guardsman Order to take effect until the end of the Turning Point.\n\nIf more than one Guardsmen Order could be issued by your kill team during the Turning Point, e.g. the Inspirational Leadership Tactical Ploy (pg 45), they must be different Guardsmen Orders.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32093,7 +31863,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -32123,34 +31892,8 @@
                 ]
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
+            "statType": "rank",
+            "dynamic": true
           },
           "SV": {
             "value": 5
@@ -32158,8 +31901,7 @@
           "W": {
             "value": 8
           }
-        },
-        "text": "Once in each Strategy phase, when it is your turn to use a Strategic Ploy, if this operative is in the killzone, it can issue a Guardsman Order: if it does, all friendly VETERAN GUARDSMAN operatives within ⬟ of and Visible to it are issued a Guardsman Order.\n\nEach time a friendly operative issues a Guardsman Order, select one Guardsman Order to take effect until the end of the Turning Point.\n\nIf more than one Guardsmen Order could be issued by your kill team during the Turning Point, e.g. the Inspirational Leadership Tactical Ploy (pg 45), they must be different Guardsmen Orders."
+        }
       },
       "Operative—Veteran Guardsman§Sniper Veteran": {
         "assets": {
@@ -32178,6 +31920,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32189,18 +31943,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 5
@@ -32228,6 +31970,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Scout",
+            "ranks": {
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32239,18 +31993,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "Scout"
           },
           "SV": {
             "value": 5
@@ -32276,6 +32018,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32287,27 +32050,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -32335,6 +32077,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -32346,17 +32099,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 5
@@ -32385,7 +32127,29 @@
             "Death Jester"
           ]
         },
+        "text": "This operative has a 4+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -32398,35 +32162,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 4+ invulnerable save."
+        }
       },
       "Operative—Void-dancer Troupe§Lead Player": {
         "assets": {
@@ -32445,7 +32187,35 @@
             "VOID-DANCER TROUPE"
           ]
         },
+        "text": "This operative has a 4+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -32458,41 +32228,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 4+ invulnerable save."
+        }
       },
       "Operative—Void-dancer Troupe§Player": {
         "assets": {
@@ -32507,7 +32249,35 @@
             "Player"
           ]
         },
+        "text": "This operative has a 4+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -32520,41 +32290,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 4+ invulnerable save."
+        }
       },
       "Operative—Void-dancer Troupe§Shadowseer": {
         "assets": {
@@ -32577,7 +32319,29 @@
             "Psyker"
           ]
         },
+        "text": "This operative has a 4+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -32590,35 +32354,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 9
           }
-        },
-        "text": "This operative has a 4+ invulnerable save."
+        }
       },
       "Operative—Warp Coven§Rubric Marine Gunner w/ soulreaper cannon": {
         "assets": {
@@ -32636,7 +32378,29 @@
             "Gunner"
           ]
         },
+        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32649,35 +32413,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation."
+        }
       },
       "Operative—Warp Coven§Rubric Marine Gunner w/ warpflamer": {
         "assets": {
@@ -32695,7 +32437,29 @@
             "Gunner"
           ]
         },
+        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32708,35 +32472,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation."
+        }
       },
       "Operative—Warp Coven§Rubric Marine Icon Bearer": {
         "assets": {
@@ -32756,7 +32498,19 @@
             "Icon Bearer"
           ]
         },
+        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -32769,25 +32523,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation."
+        }
       },
       "Operative—Warp Coven§Rubric Marine Warrior": {
         "assets": {
@@ -32805,7 +32547,29 @@
             "Warrior"
           ]
         },
+        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -32818,35 +32582,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 3
           },
           "W": {
             "value": 12
           }
-        },
-        "text": "- Each time a shooting attack is made against this operative, if the ranged weapon has a Normal Damage characteristic of 3 or less, this operative is treated as having a Save characteristic of 2+ for that shooting attack.\n- This operative cannot move more than 3⬤ during its activation."
+        }
       },
       "Operative—Warp Coven§Sorcerer": {
         "assets": {
@@ -32866,9 +32608,52 @@
             "WARP COVEN"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
+          },
+          "DF": {
+            "value": 3
+          },
+          "GA": {
+            "value": 1
+          },
+          "M": {
+            "value": 3
+          },
+          "SV": {
+            "value": 3
+          },
+          "W": {
+            "value": 13
           },
           "Boon of Tzeentch": {
             "ranks": {
@@ -32905,15 +32690,6 @@
             },
             "statType": "rank"
           },
-          "DF": {
-            "value": 3
-          },
-          "GA": {
-            "value": 1
-          },
-          "M": {
-            "value": 3
-          },
           "Pistol/khopesh": {
             "ranks": {
               "-": {
@@ -32947,42 +32723,8 @@
               }
             },
             "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 3
-          },
-          "W": {
-            "value": 13
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Warp Coven§Tzaangor Champion": {
         "assets": {
@@ -32998,7 +32740,20 @@
             "Champion"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33010,18 +32765,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
           },
           "SV": {
             "value": 6
@@ -33043,8 +32786,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Warp Coven§Tzaangor Fighter": {
         "assets": {
@@ -33058,7 +32800,29 @@
             "Fighter"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33070,27 +32834,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 6
@@ -33112,8 +32855,7 @@
             },
             "statType": "rank"
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Warp Coven§Tzaangor Horn Bearer": {
         "assets": {
@@ -33130,7 +32872,29 @@
             "Icon Bearer"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33143,35 +32907,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Warp Coven§Tzaangor Icon Bearer": {
         "assets": {
@@ -33189,7 +32931,29 @@
             "Icon Bearer"
           ]
         },
+        "text": "This operative has a 5+ invulnerable save.",
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33202,35 +32966,13 @@
           "M": {
             "value": 3
           },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
           "SV": {
             "value": 6
           },
           "W": {
             "value": 8
           }
-        },
-        "text": "This operative has a 5+ invulnerable save."
+        }
       },
       "Operative—Wyrmblade§Kelermorph": {
         "assets": {
@@ -33254,6 +32996,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -33265,27 +33028,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -33317,6 +33059,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Combat",
+            "ranks": {
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -33328,18 +33082,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              }
-            },
-            "value": "Combat"
           },
           "SV": {
             "value": 4
@@ -33366,6 +33108,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33377,27 +33140,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -33449,6 +33191,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33460,27 +33223,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -33535,6 +33277,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33546,27 +33309,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -33618,6 +33360,17 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Staunch",
+            "ranks": {
+              "Staunch": {
+                "icons": [
+                  "shield"
+                ],
+                "format": "{i} {r}"
+              }
+            }
+          },
           "APL": {
             "value": 2
           },
@@ -33629,17 +33382,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "ranks": {
-              "Staunch": {
-                "format": "{i} {r}",
-                "icons": [
-                  "shield"
-                ]
-              }
-            },
-            "value": "Staunch"
           },
           "SV": {
             "value": 5
@@ -33691,6 +33433,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33702,6 +33471,12 @@
           },
           "M": {
             "value": 3
+          },
+          "SV": {
+            "value": 5
+          },
+          "W": {
+            "value": 8
           },
           "Melee weapon": {
             "dynamic": true,
@@ -33732,7 +33507,6 @@
             "statType": "rank"
           },
           "Pistol": {
-            "dynamic": true,
             "ranks": {
               "-": {
                 "order": 0
@@ -33752,40 +33526,8 @@
                 "order": 2
               }
             },
-            "statType": "rank"
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
-          },
-          "SV": {
-            "value": 5
-          },
-          "W": {
-            "value": 8
+            "statType": "rank",
+            "dynamic": true
           }
         }
       },
@@ -33807,6 +33549,33 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 2
           },
@@ -33818,33 +33587,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 5
@@ -33902,6 +33644,18 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "Marksman",
+            "ranks": {
+              "Marksman": {
+                "icons": [
+                  "convergence-target"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -33913,18 +33667,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "Marksman": {
-                "format": "{i} {r}",
-                "icons": [
-                  "convergence-target"
-                ]
-              }
-            },
-            "value": "Marksman"
           },
           "SV": {
             "value": 4
@@ -33955,6 +33697,27 @@
           ]
         },
         "stats": {
+          "Specialism": {
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Combat": {
+                "icons": [
+                  "croc-sword"
+                ],
+                "format": "{i} {r}"
+              },
+              "Scout": {
+                "icons": [
+                  "lob-arrow"
+                ],
+                "format": "{i} {r}"
+              }
+            },
+            "dynamic": true
+          },
           "APL": {
             "value": 3
           },
@@ -33966,27 +33729,6 @@
           },
           "M": {
             "value": 3
-          },
-          "Specialism": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Combat": {
-                "format": "{i} {r}",
-                "icons": [
-                  "croc-sword"
-                ]
-              },
-              "Scout": {
-                "format": "{i} {r}",
-                "icons": [
-                  "lob-arrow"
-                ]
-              }
-            },
-            "value": "-"
           },
           "SV": {
             "value": 4
@@ -34115,271 +33857,644 @@
         }
       },
       "Requisitions§Requisitions": {},
-      "Roster§List": {
-        "aspects": {
-          "Collapse": true
-        },
-        "assets": {
-          "traits": [
-            "Dataslate§Dataslate",
-            "Kill Team§Kill Team"
-          ]
+      "Roster§Roster": {
+        "stats": {
+          "Faction Group": {
+            "statType": "rank",
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0
+              },
+              "Imperium": {
+                "order": 1,
+                "term": "Imperium Faction"
+              },
+              "Chaos": {
+                "order": 2,
+                "term": "Chaos Faction"
+              },
+              "Aeldari": {
+                "order": 3,
+                "term": "Aeldari Faction"
+              },
+              "Xenos": {
+                "order": 4,
+                "term": "Xenos Faction"
+              }
+            },
+            "statOrder": -1,
+            "visibility": "always",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Play": {
+            "statType": "rank",
+            "value": "Open",
+            "ranks": {
+              "Open": {
+                "order": 0
+              },
+              "Matched": {
+                "order": 1
+              },
+              "Narrative": {
+                "order": 2
+              }
+            },
+            "visibility": "normal",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Chaos Faction": {
+            "statType": "rank",
+            "label": "Faction",
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0,
+                "term": "-"
+              },
+              "Chaos Daemons—Chaos Daemon": {
+                "order": 1,
+                "number": 2,
+                "term": "CHAOS DAEMONS"
+              },
+              "Chaos Daemons—Gellerpox Infected": {
+                "order": 2,
+                "number": 0,
+                "term": "GELLERPOX INFECTED"
+              },
+              "Chaos Space Marines—Blooded": {
+                "order": 3,
+                "number": 0,
+                "term": "BLOODED"
+              },
+              "Chaos Space Marines—Legionary": {
+                "order": 4,
+                "number": 0,
+                "term": "LEGIONARY"
+              },
+              "Chaos Space Marines—Traitor Space Marine": {
+                "order": 5,
+                "number": 2,
+                "term": "TRAITOR SPACE MARINE"
+              },
+              "Death Guard—Death Guard": {
+                "order": 6,
+                "number": 2,
+                "term": "DEATH GUARD"
+              },
+              "Thousand Sons—Warpcoven": {
+                "order": 7,
+                "number": 0,
+                "term": "WARP COVEN"
+              }
+            },
+            "visibility": "hidden",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Aeldari Faction": {
+            "statType": "rank",
+            "label": "Faction",
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0,
+                "term": "-"
+              },
+              "Corsairs—Corsair Voidscarred": {
+                "order": 1,
+                "number": 0,
+                "term": "CORSAIR VOIDSCARRED"
+              },
+              "Craftworlds—Craftworld": {
+                "order": 2,
+                "number": 2,
+                "term": "CRAFTWORLD"
+              },
+              "Drukhari—Commorrite": {
+                "order": 3,
+                "number": 2,
+                "term": "COMMORRITE"
+              },
+              "Harlequins—Void-dancer Troupe": {
+                "order": 4,
+                "number": 0,
+                "term": "VOID-DANCER TROUPE"
+              }
+            },
+            "visibility": "hidden",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Xenos Faction": {
+            "statType": "rank",
+            "label": "Faction",
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0,
+                "term": "-"
+              },
+              "Genestealer Cults—Brood Coven": {
+                "order": 1,
+                "number": 2,
+                "term": "BROOD COVEN"
+              },
+              "Genestealer Cults—Wyrmblade": {
+                "order": 2,
+                "number": 0,
+                "term": "WYRMBLADE"
+              },
+              "Kroot—Farstalker Kinband": {
+                "order": 3,
+                "number": 0,
+                "term": "FARSTALKER KINBAND"
+              },
+              "Necrons—Hierotek Circle": {
+                "order": 4,
+                "number": 0,
+                "term": "HIEROTEK CIRCLE"
+              },
+              "Necrons—Tomb World": {
+                "order": 5,
+                "number": 2,
+                "term": "TOMB WORLD"
+              },
+              "Orks—Greenskin": {
+                "order": 6,
+                "number": 2,
+                "term": "GREENSKIN"
+              },
+              "Orks—Kommando": {
+                "order": 7,
+                "number": 0,
+                "term": "KOMMANDO"
+              },
+              "T’au Empire—Cadre Mercenary": {
+                "order": 8,
+                "number": 0,
+                "term": "CADRE MERCENARY"
+              },
+              "T’au Empire—Hunter Cadre": {
+                "order": 9,
+                "number": 2,
+                "term": "HUNTER CADRE"
+              },
+              "T’au Empire—Pathfinder": {
+                "order": 10,
+                "number": 0,
+                "term": "PATHFINDER"
+              },
+              "Tyranids—Hive Fleet": {
+                "order": 11,
+                "number": 2,
+                "term": "HIVE FLEET"
+              }
+            },
+            "visibility": "hidden",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Imperium Faction": {
+            "statType": "rank",
+            "label": "Faction",
+            "value": "-",
+            "ranks": {
+              "-": {
+                "order": 0,
+                "term": "-"
+              },
+              "Adepta Sororitas—Ecclesiarchy": {
+                "order": 1,
+                "number": 2,
+                "term": "ECCLESIARCHY"
+              },
+              "Adepta Sororitas—Novitiate": {
+                "order": 2,
+                "number": 0,
+                "term": "NOVITIATE"
+              },
+              "Adeptus Custodes—Talons of the Emperor": {
+                "order": 3,
+                "number": 2,
+                "term": "TALONS OF THE EMPEROR"
+              },
+              "Adeptus Mechanicus—Hunter Clade": {
+                "order": 4,
+                "number": 0,
+                "term": "HUNTER CLADE"
+              },
+              "Astra Cartographica—Elucidian Starstrider": {
+                "order": 5,
+                "number": 0,
+                "term": "ELUCIDIAN STARSTRIDERS"
+              },
+              "Astra Militarum—Imperial Guard": {
+                "order": 6,
+                "number": 2,
+                "term": "IMPERIAL GUARD"
+              },
+              "Astra Militarum—Kasrkin": {
+                "order": 7,
+                "number": 0,
+                "term": "KASRKIN"
+              },
+              "Astra Militarum—Veteran Guardsman": {
+                "order": 8,
+                "number": 0,
+                "term": "VETERAN GUARDSMAN"
+              },
+              "Grey Knights—Grey Knight": {
+                "order": 9,
+                "number": 0,
+                "term": "GREY KNIGHT"
+              },
+              "Navis Imperialis—Imperial Navy Breacher": {
+                "order": 10,
+                "number": 0,
+                "term": "IMPERIAL NAVY BREACHER"
+              },
+              "Space Marines—Intercession Squad": {
+                "order": 11,
+                "number": 0,
+                "term": "INTERCESSION SQUAD"
+              },
+              "Space Marines—Phobos Strike Team": {
+                "order": 12,
+                "number": 0,
+                "term": "PHOBOS STRIKE TEAM"
+              },
+              "Space Marines—Space Marine": {
+                "order": 13,
+                "number": 1,
+                "term": "SPACE MARINE"
+              }
+            },
+            "visibility": "hidden",
+            "dynamic": true,
+            "tracked": false
+          },
+          "Leader": {
+            "statType": "numeric",
+            "value": 0,
+            "visibility": "hidden",
+            "dynamic": false,
+            "tracked": true,
+            "max": 1
+          }
         },
         "rules": {
-          "allowFactionKeyword": {
-            "actions": [
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    [
-                      "Kill Team",
-                      "Dataslate",
-                      "Matched Roster"
-                    ],
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Imperium Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    [
-                      "Kill Team",
-                      "Dataslate",
-                      "Matched Roster"
-                    ],
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Chaos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    [
-                      "Kill Team",
-                      "Dataslate",
-                      "Matched Roster"
-                    ],
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Aeldari Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    [
-                      "Kill Team",
-                      "Dataslate",
-                      "Matched Roster"
-                    ],
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Xenos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "included",
-                    "classification",
-                    "Fire Team",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Imperium Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "included",
-                    "classification",
-                    "Fire Team",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Chaos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "included",
-                    "classification",
-                    "Fire Team",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Aeldari Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "included",
-                    "classification",
-                    "Fire Team",
-                    "constraints",
-                    "any"
-                  ]
-                ],
-                "value": [
-                  "{self}",
-                  "stats",
-                  "Xenos Faction",
-                  "processed",
-                  "term",
-                  "current"
-                ]
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 2
-          },
-          "changeDataslateToRosterForMatched": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Dataslate",
-                    "item"
-                  ]
-                ],
-                "value": "Matched Roster§Matched Roster"
-              }
-            ],
+          "revealImperium": {
             "evals": [
               {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
                 "paths": [
                   [
                     "{self}",
                     "stats",
-                    "Play",
+                    "Faction Group",
                     "value"
                   ]
                 ],
-                "value": "Matched"
+                "value": "Imperium",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
               }
             ],
-            "evaluate": "OR",
             "failState": "pass",
-            "order": 1
-          },
-          "disallowOperatives": {
+            "evaluate": "AND",
+            "order": 1,
             "actions": [
               {
-                "actionType": "remove",
-                "iterations": 1,
-                "note": "Remove operative allowance if fire teams are allowed",
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Imperium Faction",
+                    "visibility"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "always",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Chaos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Aeldari Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Xenos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              }
+            ]
+          },
+          "revealXenos": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Faction Group",
+                    "value"
+                  ]
+                ],
+                "value": "Xenos",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 1,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Xenos Faction",
+                    "visibility"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "always",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Chaos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Aeldari Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Imperium Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              }
+            ]
+          },
+          "revealChaos": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Faction Group",
+                    "value"
+                  ]
+                ],
+                "value": "Chaos",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 1,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Chaos Faction",
+                    "visibility"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "always",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Imperium Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Aeldari Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Xenos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              }
+            ]
+          },
+          "revealAeldari": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Faction Group",
+                    "value"
+                  ]
+                ],
+                "value": "Aeldari",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 1,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Aeldari Faction",
+                    "visibility"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "always",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Chaos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Imperium Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Xenos Faction",
+                    "value"
+                  ]
+                ],
+                "actionType": "set",
+                "value": "-",
+                "iterations": 1
+              }
+            ]
+          },
+          "disallowOperatives": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Imperium Faction",
+                    "processed",
+                    "numeric",
+                    "current"
+                  ],
+                  [
+                    "{self}",
+                    "stats",
+                    "Chaos Faction",
+                    "processed",
+                    "numeric",
+                    "current"
+                  ],
+                  [
+                    "{self}",
+                    "stats",
+                    "Aeldari Faction",
+                    "processed",
+                    "numeric",
+                    "current"
+                  ],
+                  [
+                    "{self}",
+                    "stats",
+                    "Xenos Faction",
+                    "processed",
+                    "numeric",
+                    "current"
+                  ]
+                ],
+                "min": 1,
+                "operator": "SUM",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 2,
+            "actions": [
+              {
                 "paths": [
                   [
                     "{self}",
@@ -34390,12 +34505,11 @@
                     "classifications"
                   ]
                 ],
-                "value": "Operative"
+                "actionType": "remove",
+                "value": "Operative",
+                "iterations": 1
               },
               {
-                "actionType": "set",
-                "iterations": 1,
-                "note": "designate specific # of fire teams",
                 "paths": [
                   [
                     "{self}",
@@ -34416,6 +34530,7 @@
                     "max"
                   ]
                 ],
+                "actionType": "set",
                 "value": [
                   "{self}",
                   "rules",
@@ -34424,61 +34539,273 @@
                   "0",
                   "result",
                   "integer"
-                ]
+                ],
+                "iterations": 1
               }
-            ],
+            ]
+          },
+          "allowFactionKeyword": {
+            "failState": "pass",
+            "evaluate": "AND",
+            "order": 2,
+            "actions": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    [
+                      "Kill Team",
+                      "Dataslate"
+                    ],
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Imperium Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    [
+                      "Kill Team",
+                      "Dataslate"
+                    ],
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Chaos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    [
+                      "Kill Team",
+                      "Dataslate"
+                    ],
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Aeldari Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    [
+                      "Kill Team",
+                      "Dataslate"
+                    ],
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Xenos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    "Kill Team",
+                    "included",
+                    "classification",
+                    "Fire Team",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Imperium Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    "Kill Team",
+                    "included",
+                    "classification",
+                    "Fire Team",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Chaos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    "Kill Team",
+                    "included",
+                    "classification",
+                    "Fire Team",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Aeldari Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              },
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "traits",
+                    "classification",
+                    "Kill Team",
+                    "included",
+                    "classification",
+                    "Fire Team",
+                    "constraints",
+                    "any"
+                  ]
+                ],
+                "actionType": "add",
+                "value": [
+                  "{self}",
+                  "stats",
+                  "Xenos Faction",
+                  "processed",
+                  "term",
+                  "current"
+                ],
+                "iterations": 1
+              }
+            ]
+          },
+          "removeDataslate": {
             "evals": [
               {
-                "actionable": true,
-                "min": 1,
-                "not": false,
-                "note": "Check whether fire teams are allowed for the selected faction",
-                "operator": "SUM",
                 "paths": [
                   [
                     "{self}",
                     "stats",
-                    "Imperium Faction",
-                    "processed",
-                    "numeric",
-                    "current"
-                  ],
-                  [
-                    "{self}",
-                    "stats",
-                    "Chaos Faction",
-                    "processed",
-                    "numeric",
-                    "current"
-                  ],
-                  [
-                    "{self}",
-                    "stats",
-                    "Aeldari Faction",
-                    "processed",
-                    "numeric",
-                    "current"
-                  ],
-                  [
-                    "{self}",
-                    "stats",
-                    "Xenos Faction",
-                    "processed",
-                    "numeric",
-                    "current"
+                    "Play",
+                    "value"
                   ]
-                ]
+                ],
+                "value": "Narrative",
+                "operator": "AND",
+                "not": true,
+                "actionable": true
               }
             ],
-            "evaluate": "AND",
             "failState": "pass",
-            "order": 2
-          },
-          "matchedPlay": {
+            "evaluate": "OR",
+            "order": 1,
             "actions": [
               {
-                "actionType": "set",
-                "iterations": 1,
+                "paths": [
+                  [
+                    "{self}",
+                    "traits"
+                  ]
+                ],
+                "actionType": "remove",
+                "value": "Dataslate§Dataslate",
+                "iterations": 1
+              }
+            ]
+          },
+          "matchedPlay": {
+            "evals": [
+              {
+                "paths": [
+                  [
+                    "{self}",
+                    "stats",
+                    "Play",
+                    "value"
+                  ]
+                ],
+                "value": "Matched",
+                "operator": "AND",
+                "not": false,
+                "actionable": true
+              }
+            ],
+            "failState": "pass",
+            "evaluate": "AND",
+            "actions": [
+              {
                 "paths": [
                   [
                     "{self}",
@@ -34487,689 +34814,21 @@
                     "min"
                   ]
                 ],
-                "value": 1
-              },
-              {
-                "actionType": "add",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "assets",
-                    "templateClass",
-                    "Operative",
-                    "allowed",
-                    "classifications"
-                  ],
-                  [
-                    "{self}",
-                    "traits",
-                    "classification",
-                    "Kill Team",
-                    "assets",
-                    "classification",
-                    "Fire Team",
-                    "assets",
-                    "templateClass",
-                    "Operative",
-                    "allowed",
-                    "classifications"
-                  ]
-                ],
-                "value": "Equipment"
+                "actionType": "set",
+                "value": 1,
+                "iterations": 1
               }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Matched"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass"
-          },
-          "removeDataslateForOpen": {
-            "actions": [
-              {
-                "actionType": "remove",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "traits"
-                  ]
-                ],
-                "value": "Dataslate§Dataslate"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Play",
-                    "value"
-                  ]
-                ],
-                "value": "Open"
-              }
-            ],
-            "evaluate": "OR",
-            "failState": "pass",
-            "order": 1
-          },
-          "revealAeldari": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Aeldari Faction",
-                    "visibility"
-                  ]
-                ],
-                "value": "always"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Chaos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Imperium Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Xenos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Faction Group",
-                    "value"
-                  ]
-                ],
-                "value": "Aeldari"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 1
-          },
-          "revealChaos": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Chaos Faction",
-                    "visibility"
-                  ]
-                ],
-                "value": "always"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Imperium Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Aeldari Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Xenos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Faction Group",
-                    "value"
-                  ]
-                ],
-                "value": "Chaos"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 1
-          },
-          "revealImperium": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Imperium Faction",
-                    "visibility"
-                  ]
-                ],
-                "value": "always"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Chaos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Aeldari Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Xenos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Faction Group",
-                    "value"
-                  ]
-                ],
-                "value": "Imperium"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 1
-          },
-          "revealXenos": {
-            "actions": [
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Xenos Faction",
-                    "visibility"
-                  ]
-                ],
-                "value": "always"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Chaos Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Aeldari Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              },
-              {
-                "actionType": "set",
-                "iterations": 1,
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Imperium Faction",
-                    "value"
-                  ]
-                ],
-                "value": "-"
-              }
-            ],
-            "evals": [
-              {
-                "actionable": true,
-                "not": false,
-                "operator": "AND",
-                "paths": [
-                  [
-                    "{self}",
-                    "stats",
-                    "Faction Group",
-                    "value"
-                  ]
-                ],
-                "value": "Xenos"
-              }
-            ],
-            "evaluate": "AND",
-            "failState": "pass",
-            "order": 1
+            ]
           }
         },
-        "stats": {
-          "Aeldari Faction": {
-            "dynamic": true,
-            "label": "Faction",
-            "ranks": {
-              "-": {
-                "order": 0,
-                "term": "-"
-              },
-              "Corsairs—Corsair Voidscarred": {
-                "number": 0,
-                "order": 1,
-                "term": "CORSAIR VOIDSCARRED"
-              },
-              "Craftworlds—Craftworld": {
-                "number": 2,
-                "order": 2,
-                "term": "CRAFTWORLD"
-              },
-              "Drukhari—Commorrite": {
-                "number": 2,
-                "order": 3,
-                "term": "COMMORRITE"
-              },
-              "Harlequins—Void-dancer Troupe": {
-                "number": 0,
-                "order": 4,
-                "term": "VOID-DANCER TROUPE"
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "hidden"
-          },
-          "Chaos Faction": {
-            "dynamic": true,
-            "label": "Faction",
-            "ranks": {
-              "-": {
-                "order": 0,
-                "term": "-"
-              },
-              "Chaos Daemons—Chaos Daemon": {
-                "number": 2,
-                "order": 1,
-                "term": "CHAOS DAEMONS"
-              },
-              "Chaos Daemons—Gellerpox Infected": {
-                "number": 0,
-                "order": 2,
-                "term": "GELLERPOX INFECTED"
-              },
-              "Chaos Space Marines—Blooded": {
-                "number": 0,
-                "order": 3,
-                "term": "BLOODED"
-              },
-              "Chaos Space Marines—Legionary": {
-                "number": 0,
-                "order": 4,
-                "term": "LEGIONARY"
-              },
-              "Chaos Space Marines—Traitor Space Marine": {
-                "number": 2,
-                "order": 5,
-                "term": "TRAITOR SPACE MARINE"
-              },
-              "Death Guard—Death Guard": {
-                "number": 2,
-                "order": 6,
-                "term": "DEATH GUARD"
-              },
-              "Thousand Sons—Warpcoven": {
-                "number": 0,
-                "order": 7,
-                "term": "WARP COVEN"
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "hidden"
-          },
-          "Faction Group": {
-            "dynamic": true,
-            "ranks": {
-              "-": {
-                "order": 0
-              },
-              "Aeldari": {
-                "order": 3,
-                "term": "Aeldari Faction"
-              },
-              "Chaos": {
-                "order": 2,
-                "term": "Chaos Faction"
-              },
-              "Imperium": {
-                "order": 1,
-                "term": "Imperium Faction"
-              },
-              "Xenos": {
-                "order": 4,
-                "term": "Xenos Faction"
-              }
-            },
-            "statOrder": -1,
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "always"
-          },
-          "Imperium Faction": {
-            "dynamic": true,
-            "label": "Faction",
-            "ranks": {
-              "-": {
-                "order": 0,
-                "term": "-"
-              },
-              "Adepta Sororitas—Ecclesiarchy": {
-                "number": 2,
-                "order": 1,
-                "term": "ECCLESIARCHY"
-              },
-              "Adepta Sororitas—Novitiate": {
-                "number": 0,
-                "order": 2,
-                "term": "NOVITIATE"
-              },
-              "Adeptus Custodes—Talons of the Emperor": {
-                "number": 2,
-                "order": 3,
-                "term": "TALONS OF THE EMPEROR"
-              },
-              "Adeptus Mechanicus—Hunter Clade": {
-                "number": 0,
-                "order": 4,
-                "term": "HUNTER CLADE"
-              },
-              "Astra Cartographica—Elucidian Starstrider": {
-                "number": 0,
-                "order": 5,
-                "term": "ELUCIDIAN STARSTRIDERS"
-              },
-              "Astra Militarum—Imperial Guard": {
-                "number": 2,
-                "order": 6,
-                "term": "IMPERIAL GUARD"
-              },
-              "Astra Militarum—Kasrkin": {
-                "number": 0,
-                "order": 7,
-                "term": "KASRKIN"
-              },
-              "Astra Militarum—Veteran Guardsman": {
-                "number": 0,
-                "order": 8,
-                "term": "VETERAN GUARDSMAN"
-              },
-              "Grey Knights—Grey Knight": {
-                "number": 0,
-                "order": 9,
-                "term": "GREY KNIGHT"
-              },
-              "Navis Imperialis—Imperial Navy Breacher": {
-                "number": 0,
-                "order": 10,
-                "term": "IMPERIAL NAVY BREACHER"
-              },
-              "Space Marines—Intercession Squad": {
-                "number": 0,
-                "order": 11,
-                "term": "INTERCESSION SQUAD"
-              },
-              "Space Marines—Phobos Strike Team": {
-                "number": 0,
-                "order": 12,
-                "term": "PHOBOS STRIKE TEAM"
-              },
-              "Space Marines—Space Marine": {
-                "number": 1,
-                "order": 13,
-                "term": "SPACE MARINE"
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "hidden"
-          },
-          "Keyword": {
-            "dynamic": true,
-            "statType": "term",
-            "tracked": false,
-            "value": "",
-            "visibility": "normal"
-          },
-          "Leader": {
-            "dynamic": false,
-            "max": 1,
-            "statType": "numeric",
-            "tracked": true,
-            "value": 0,
-            "visibility": "hidden"
-          },
-          "Play": {
-            "dynamic": true,
-            "ranks": {
-              "Matched": {
-                "order": 1
-              },
-              "Narrative": {
-                "order": 2
-              },
-              "Open": {
-                "order": 0
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "Open",
-            "visibility": "normal"
-          },
-          "Xenos Faction": {
-            "dynamic": true,
-            "label": "Faction",
-            "ranks": {
-              "-": {
-                "order": 0,
-                "term": "-"
-              },
-              "Genestealer Cults—Brood Coven": {
-                "number": 2,
-                "order": 1,
-                "term": "BROOD COVEN"
-              },
-              "Genestealer Cults—Wyrmblade": {
-                "number": 0,
-                "order": 2,
-                "term": "WYRMBLADE"
-              },
-              "Kroot—Farstalker Kinband": {
-                "number": 0,
-                "order": 3,
-                "term": "FARSTALKER KINBAND"
-              },
-              "Necrons—Hierotek Circle": {
-                "number": 0,
-                "order": 4,
-                "term": "HIEROTEK CIRCLE"
-              },
-              "Necrons—Tomb World": {
-                "number": 2,
-                "order": 5,
-                "term": "TOMB WORLD"
-              },
-              "Orks—Greenskin": {
-                "number": 2,
-                "order": 6,
-                "term": "GREENSKIN"
-              },
-              "Orks—Kommando": {
-                "number": 0,
-                "order": 7,
-                "term": "KOMMANDO"
-              },
-              "T’au Empire—Cadre Mercenary": {
-                "number": 0,
-                "order": 8,
-                "term": "CADRE MERCENARY"
-              },
-              "T’au Empire—Hunter Cadre": {
-                "number": 2,
-                "order": 9,
-                "term": "HUNTER CADRE"
-              },
-              "T’au Empire—Pathfinder": {
-                "number": 0,
-                "order": 10,
-                "term": "PATHFINDER"
-              },
-              "Tyranids—Hive Fleet": {
-                "number": 2,
-                "order": 11,
-                "term": "HIVE FLEET"
-              }
-            },
-            "statType": "rank",
-            "tracked": false,
-            "value": "-",
-            "visibility": "hidden"
-          }
+        "assets": {
+          "traits": [
+            "Dataslate§Dataslate",
+            "Kill Team§Kill Team"
+          ]
+        },
+        "aspects": {
+          "Collapse": true
         }
       },
       "Rule§*Combi": {
@@ -35218,12 +34877,12 @@
         "text": "You start the battle with a pool of 10 Elite points. Each time a friendly KASRKIN operative fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can spend one or more of your Elite points to adjust one (and only one) of your dice. For each point you spend, add 1 to the dice result, and reduce the number of Elite points in your pool by 1.\n\nFor example, a friendly KASRKIN operative makes a shooting attack. In the Roll Attack Dice step of that shooting attack, you roll 4 attack dice and the results are 1, 2, 4 and 6. You spend 2 Elite points to increase the result of one of your attack dice, modifying a 2 into a 4. Note that you cannot spend Elite points to modify more than one dice from the roll."
       },
       "Rule§Favoured of the Dark Gods": {
+        "text": "Once per Turning Point, when it is your turn to use a Strategic Ploy, if any friendly operatives with this ability are in the kill zone, you can use a Strategic Ploy without spending any CPs; that Strategic Ploy must have the same <MARK OF CHAOS> selectable keyword as one friendly operative with this ability. For example, if an operative with this ability has the KHORNE keyword, you could use the Blood for the Blood God Strategic Ploy. If an operative with this ability has the UNDIVIDED keyword, you can use the following Strategic Ploys for this ability instead: Hateful Assault, Malicious Volleys.",
         "keywords": {
           "Tags": [
             "LEGIONARY"
           ]
-        },
-        "text": "Once per Turning Point, when it is your turn to use a Strategic Ploy, if any friendly operatives with this ability are in the kill zone, you can use a Strategic Ploy without spending any CPs; that Strategic Ploy must have the same <MARK OF CHAOS> selectable keyword as one friendly operative with this ability. For example, if an operative with this ability has the KHORNE keyword, you could use the Blood for the Blood God Strategic Ploy. If an operative with this ability has the UNDIVIDED keyword, you can use the following Strategic Ploys for this ability instead: Hateful Assault, Malicious Volleys."
+        }
       },
       "Rule§Fusillade": {
         "text": "Each time a friendly operative performs a Shoot action and selects this weapon, after selecting a valid target, you can select any number of other valid targets within ⬤ of the original target. Distribute your attack dice between the targets you have selected. Make a shooting attack with this weapon (using the same profile) against each of the targets you have selected using the attack dice you have distributed to each of them."
@@ -35256,12 +34915,12 @@
         "text": "Each time a friendly operative makes a shooting attack with this weapon, in the Roll Attack Dice step of that shooting attack, for each critical hit retained, inflict x mortal wounds on the target. x is the number after the weapon’s MW, e.g. MW3."
       },
       "Rule§No Cover": {
+        "text": "Each time a friendly operative makes a shooting attack with this weapon, for that shooting attack, defence dice cannot be automatically retained as a result of Cover (they must be rolled instead).",
         "keywords": {
           "Tags": [
             "VETERAN GUARDSMAN"
           ]
-        },
-        "text": "Each time a friendly operative makes a shooting attack with this weapon, for that shooting attack, defence dice cannot be automatically retained as a result of Cover (they must be rolled instead)."
+        }
       },
       "Rule§Preternatural Assassin": {
         "text": "This operative cannot be equipped with equipment.\n\nThis operative has a 4+ invulnerable save.\n\nEach time a shooting attack is made against this operative, in the Roll Defence Dice step of that shooting attack, before rolling your defence dice, if it is in Cover, you can do one of the following:\n- Retain an additional dice as a successful normal save as a result of Cover.\n- Retain one defence dice as a successful critical save instead of a normal save as a result of Cover."
@@ -35273,12 +34932,12 @@
         "text": "Each time a friendly operative fights in combat with this weapon, in the Resolve Successful Hits step of that combat, if you strike with a critical hit, inflict x mortal wounds on each other enemy operative Visible to the friendly operative and within ▲ of it or the target operative. x is the number after the weapon’s Reap, e.g. Reap 1."
       },
       "Rule§Relentless": {
+        "text": "Each time a friendly operative fights in combat or makes a shooting attack with this weapon, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll any or all of your attack dice.",
         "keywords": {
           "Tags": [
             "KOMMANDO"
           ]
-        },
-        "text": "Each time a friendly operative fights in combat or makes a shooting attack with this weapon, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll any or all of your attack dice."
+        }
       },
       "Rule§Rending": {
         "text": "Each time a friendly operative fights in combat or makes a shooting attack with this weapon, in the Roll Attack Dice step of that combat or shooting attack, if you retain any critical hits you can retain one normal hit as a critical hit."
@@ -35394,6 +35053,7 @@
         "text": "Select one friendly KASRKIN operative Visible to and within ▲ of this operative. That friendly operative regains 2D3 lost wounds. An operative cannot be selected for this action if it was revived using the Medic! ability during the same Turning Point. This operative cannot perform this action while within Engagement Range of an enemy operative."
       },
       "Unique Actions§Command (0AP)": {
+        "stats": {},
         "text": "Select one friendly DEATHMARK or IMMORTAL operative Visible to and within ⬟ of this operative or a friendly IMMORTAL DESPOTEK operative. That selected friendly operative can immediately perform a free Fight, Overwatch, 1AP Pick Up or 1AP mission action. This operative cannot perform this action while within Engagement Range of an enemy operative."
       },
       "Unique Actions§Command Uplink (2AP)": {
@@ -35412,6 +35072,7 @@
         "text": "Select one ready friendly GUARDIAN DEFENDER HEAVY WEAPON PLATFORM operative within ⬛ of this operative. Perform a free Normal Move, Fall Back or Shoot action with that operative, then change its order token to activated. This operative cannot perform this action while within Engagement Range of enemy operatives."
       },
       "Unique Actions§Cult Icon (1AP)": {
+        "stats": {},
         "text": "Until the end of the Turning Point, while this operative is Visible to and within ⬛ of a friendly BROOD COVEN operative, that friendly operative is inspired by the cult. While an operative is inspired by the cult, each time it fights in combat or makes a shooting attack, in the Roll Attack Dice step of that combat or shooting attack, you can re-roll one of your attack dice."
       },
       "Unique Actions§Da Best Spot (2AP)": {
@@ -35442,6 +35103,7 @@
         "text": "Select one other friendly BLOODED operative that is not ready and is Visible to and within ⬛ of this operative. Then select one of the following:\n- That operative immediately performs a free Dash action.\n- If that operative has an Engage order, it can perform an Overwatch action.\n\nThis operative cannot perform this action while within Engagement Range of an enemy operative."
       },
       "Unique Actions§Enhanced Data-tether (1AP)": {
+        "stats": {},
         "text": "Select one friendly HUNTER CLADE operative Visible to and within ⬟ of this operative. Add 1 to its APL. This operative cannot perform this action while within Engagement Range of an enemy operative."
       },
       "Unique Actions§Familiar’s Soulsight (1AP)": {
@@ -35475,6 +35137,7 @@
         "text": "Until this operative is next activated, while a friendly HUNTER CADRE operative is within ⬛ of this operative, it has a 5+ invulnerable save."
       },
       "Unique Actions§Guerilla Warfare (1AP)": {
+        "stats": {},
         "text": "Change this operative’s order. This operative cannot perform this action during the first Turning Point or while within ⬛ of an enemy operative."
       },
       "Unique Actions§Gunslinger Salvo (1AP)": {
@@ -35532,6 +35195,7 @@
         "text": "Select one enemy operative. Until the end of the Turning Point, while that enemy operative is within ⬟ horizontally and any distance vertically of your Pech’ra token, it is marked for the hunt. Until the end of the Turning Point, each time a friendly FARSTALKER KINBAND operative within ⬟ horizontally and any distance vertically of your Pech’ra token makes a shooting attack against an enemy operative marked for the hunt, that enemy operative cannot use Light terrain as Cover for that shooting attack. This operative cannot perform this action while within ⬟ of an enemy operative."
       },
       "Unique Actions§Markerlight (1AP)": {
+        "stats": {},
         "text": "Select one enemy operative Visible to this operative. That enemy operative gains one Markerlight token until the end of the Turning Point. This operative cannot perform this action within Engagement Range of enemy operatives. If an operative would perform this action and a Shoot action in the same activation, only the target of that Shoot action’s shooting attack can be selected for this action.\n\nEach time a shooting attack is made against an enemy operative, in the Roll Attack Dice step of that shooting attack, if that enemy operative has one or more Markerlight tokens, you can re-roll one of your attack dice."
       },
       "Unique Actions§Markerlight Grenade (1AP)": {
@@ -35547,6 +35211,7 @@
         "text": "Until the end of this operative’s activation, the ranged weapons it is equipped with gain the No Cover special rule."
       },
       "Unique Actions§Omnispex (1AP)": {
+        "stats": {},
         "text": "Select one friendly HUNTER CLADE operative Visible to and within ⬛ of this operative, then select one enemy operative. Until the end of the Turning Point, each time that friendly model makes a shooting attack, for that shooting attack:\n- Areas of smoke have no effect when determining line of sight.\n- That enemy operative is not obscured.\n- If that enemy operative is the target, that friendly operative’s ranged weapons have the No Cover special rule.\n\nThis operative cannot perform this action while within Engagement Range of an enemy operative."
       },
       "Unique Actions§Orbital Scan (2AP)": {
@@ -35601,6 +35266,7 @@
         "text": "Perform a free Dash, Fall Back or Normal Move action with this operative. At any point during that move, you can perform the Pick Up action for free with this operative, and any remaining increments of movement can be used after it does so."
       },
       "Unique Actions§Saboteurs (1AP)": {
+        "stats": {},
         "text": "An operative can perform this action while within ▲ of one of your Saboteur tokens. Unless the operative is a SABOTEUR or MINELAYER operative, an operative cannot perform this action while within Engagement Range of an enemy operative. If this action is performed, remove that Saboteur token."
       },
       "Unique Actions§Sacrilegious Actuation (1AP)": {
@@ -35649,6 +35315,7 @@
         "text": "Select one friendly NOVITIATE operative within ⬟ of and Visible to this operative. Add 1 to its APL."
       },
       "Unique Actions§Strategise (1AP)": {
+        "stats": {},
         "text": "You gain 1CP. This operative cannot perform this action while within ⬛ of an enemy operative."
       },
       "Unique Actions§Structural Surveyor (1AP)": {
@@ -35673,6 +35340,7 @@
         "text": "Until the end of the activation, the Sanctus sniper rifle this operative is equipped with gains the Lethal 5+ special rule."
       },
       "Unique Actions§Terror (0AP)": {
+        "stats": {},
         "text": "Until the end of the Turning Point:\n- Each time an enemy operative would perform a mission action or the Pick Up action, if any friendly operatives that performed this action during this Turning Point are within ⬛ of that enemy operative, one additional action point must be subtracted for that enemy operative to perform that action.\n- When determining control of an objective marker that any friendly operatives that performed this action during this Turning Point are within range of, treat enemy operatives’ total APL as being one less. Note that this is not a modifier."
       },
       "Unique Actions§Track Target (1AP)": {
@@ -35808,6 +35476,25 @@
           }
         }
       },
+      "Upgrade§Boltgun": {
+        "stats": {
+          "!": {
+            "value": "-"
+          },
+          "A": {
+            "value": 4
+          },
+          "D": {
+            "value": "3/4"
+          },
+          "SR": {
+            "value": "-"
+          },
+          "WS/BS": {
+            "value": 3
+          }
+        }
+      },
       "Upgrade§Chapter Tactics": {
         "stats": {
           "Chapter Tactics": {
@@ -35820,10 +35507,15 @@
         "assets": {
           "traits": [
             "Weapons—Ranged§Combi-flamer",
+            "Weapons—Ranged§Combi-flamer",
+            "Rule§*Combi",
+            "Rule§*Combi (DW)",
+            "Rule§Limited",
             "Rule§Limited",
             "Rule§Rng x",
+            "Rule§Rng x",
             "Rule§Torrent x",
-            "Weapons—Ranged§Boltgun"
+            "Rule§Torrent x"
           ]
         },
         "stats": {
@@ -36369,14 +36061,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36394,11 +36086,11 @@
           "D": {
             "value": "3/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Lethal 5+, Brutal"
@@ -36419,14 +36111,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36441,14 +36133,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36468,14 +36160,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36493,14 +36185,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36520,14 +36212,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Shield*"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36545,14 +36237,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36570,14 +36262,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36592,14 +36284,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36620,14 +36312,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Feast*"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36647,14 +36339,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36674,14 +36366,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36701,14 +36393,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36728,14 +36420,14 @@
           "D": {
             "value": "5/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36753,14 +36445,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36775,14 +36467,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36803,14 +36495,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36830,14 +36522,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36855,14 +36547,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36883,14 +36575,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36910,14 +36602,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36937,14 +36629,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36962,14 +36654,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -36987,14 +36679,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37009,14 +36701,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37037,14 +36729,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37065,11 +36757,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Balanced, Lethal 5+"
@@ -37085,14 +36777,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37112,14 +36804,14 @@
           "D": {
             "value": "4/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37139,14 +36831,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37161,14 +36853,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37186,14 +36878,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37211,14 +36903,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37239,14 +36931,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37269,14 +36961,14 @@
           "D": {
             "value": "5/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Vicious Blows*"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37297,11 +36989,11 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Lethal 5+, Relentless"
@@ -37322,14 +37014,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37344,14 +37036,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37371,14 +37063,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37396,14 +37088,14 @@
           "D": {
             "value": "1/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37421,11 +37113,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Daemonic Energies*"
@@ -37444,14 +37136,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37471,14 +37163,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37496,14 +37188,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37523,14 +37215,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Engineered*"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37551,14 +37243,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37573,14 +37265,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37595,14 +37287,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37617,14 +37309,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37642,14 +37334,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37667,14 +37359,14 @@
           "D": {
             "value": "1/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37689,14 +37381,14 @@
           "D": {
             "value": "5/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37711,14 +37403,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37738,14 +37430,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37765,14 +37457,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37792,14 +37484,14 @@
           "D": {
             "value": "6/8"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37819,14 +37511,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37847,11 +37539,11 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Lethal 5+, Relentless"
@@ -37872,14 +37564,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37897,14 +37589,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37922,14 +37614,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37949,14 +37641,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37976,14 +37668,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -37998,14 +37690,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38020,14 +37712,14 @@
           "D": {
             "value": "3/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38042,14 +37734,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38069,14 +37761,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38096,14 +37788,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38124,11 +37816,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Lethal 5+, Relentless"
@@ -38149,14 +37841,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38177,14 +37869,14 @@
           "D": {
             "value": "5/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38206,11 +37898,11 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Balanced, Brutal"
@@ -38231,14 +37923,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38258,14 +37950,14 @@
           "D": {
             "value": "3/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38285,14 +37977,14 @@
           "D": {
             "value": "6/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38307,14 +37999,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38329,14 +38021,14 @@
           "D": {
             "value": "8/9"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38354,14 +38046,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38376,14 +38068,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38398,14 +38090,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38420,14 +38112,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38442,14 +38134,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38464,14 +38156,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38491,14 +38183,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38518,14 +38210,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38546,14 +38238,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38571,14 +38263,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38596,14 +38288,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38623,14 +38315,14 @@
           "D": {
             "value": "5/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38650,14 +38342,14 @@
           "D": {
             "value": "5/7"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38677,14 +38369,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38705,14 +38397,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38732,14 +38424,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38760,11 +38452,11 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Lethal 5+, Blood Offering*"
@@ -38783,14 +38475,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38808,14 +38500,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38833,14 +38525,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38860,14 +38552,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38882,14 +38574,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38904,14 +38596,14 @@
           "D": {
             "value": "3/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38932,14 +38624,14 @@
           "D": {
             "value": "3/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 4+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38959,14 +38651,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -38981,14 +38673,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39003,14 +38695,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39025,14 +38717,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39049,14 +38741,14 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Brutal, Shield*"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39076,14 +38768,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39098,14 +38790,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39127,11 +38819,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         },
         "text": "Ceaseless, Stalk*"
@@ -39147,14 +38839,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39169,14 +38861,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Rending"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39191,14 +38883,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39219,14 +38911,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39246,14 +38938,14 @@
           "D": {
             "value": "1/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39273,14 +38965,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39300,14 +38992,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39328,14 +39020,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39356,14 +39048,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Rng ⬟, Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39383,14 +39075,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39410,14 +39102,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39435,14 +39127,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39460,14 +39152,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39482,14 +39174,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Melee"
-          },
           "SR": {
             "value": "Swipe*"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Melee"
           }
         }
       },
@@ -39504,11 +39196,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Indirect, Lethal 5+, Limited"
@@ -39524,14 +39216,14 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP2, Blast ⬤"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39546,14 +39238,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39568,14 +39260,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39590,14 +39282,14 @@
           "D": {
             "value": "3/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39619,14 +39311,14 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39641,14 +39333,14 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39663,11 +39355,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, AP1, Limited, Indirect"
@@ -39690,14 +39382,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39718,14 +39410,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39740,14 +39432,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39762,14 +39454,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39784,14 +39476,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39809,14 +39501,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39836,14 +39528,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Ceaseless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39863,14 +39555,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39891,14 +39583,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39913,14 +39605,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Blast ⬤"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39935,14 +39627,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39963,14 +39655,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Balanced"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -39991,14 +39683,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬛, Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40018,14 +39710,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Fusillade"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40046,14 +39738,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP2"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40068,11 +39760,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ▲, Indirect, Limited"
@@ -40088,11 +39780,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ⬤, Limited, Indirect, Ceaseless"
@@ -40111,14 +39803,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40138,14 +39830,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40165,14 +39857,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40187,14 +39879,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40212,11 +39904,11 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ⬤"
@@ -40235,11 +39927,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Ceaseless, Fusillade"
@@ -40255,11 +39947,11 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Combi*, Rng ⬟, Torrent ⬤, Limited"
@@ -40275,11 +39967,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Combi*, AP1, Grav*, Limited"
@@ -40295,11 +39987,11 @@
           "D": {
             "value": "6/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Combi*, Rng ⬟, AP2, Limited"
@@ -40315,11 +40007,11 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Combi*, AP1, Limited"
@@ -40335,11 +40027,11 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Combi* AP2, Hot, Limited"
@@ -40362,14 +40054,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40387,14 +40079,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40409,14 +40101,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40434,14 +40126,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Unload Slugs*"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40464,11 +40156,11 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Lethal 5+, Silent"
@@ -40481,14 +40173,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40506,14 +40198,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40531,14 +40223,14 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40562,11 +40254,11 @@
           "D": {
             "value": "4/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng 2⬤, Blast ⬤, AP1, Indirect, Limited"
@@ -40587,14 +40279,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Ceaseless"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40609,11 +40301,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng , Limited, Indirect, Lethal 5+"
@@ -40638,11 +40330,11 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ⬤, Indirect, Limited"
@@ -40667,11 +40359,11 @@
           "D": {
             "value": "0/0"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬛, Lethal 3+, Indirect, Limited"
@@ -40692,14 +40384,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40721,11 +40413,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Balanced, Lethal 5+"
@@ -40749,11 +40441,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, AP2, Cumbersome*, Torrent ⬤"
@@ -40776,11 +40468,11 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "AP1, Bomb Squig*"
@@ -40802,14 +40494,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40824,11 +40516,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "No Cover, Blast ⬤"
@@ -40847,14 +40539,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40875,11 +40567,11 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ⬤"
@@ -40902,11 +40594,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Relentless, Fusillade, Rng ⬟"
@@ -40924,14 +40616,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -40953,11 +40645,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ⬤, Indirect, Limited"
@@ -40980,14 +40672,14 @@
           "D": {
             "value": "6/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP2"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41009,14 +40701,14 @@
           "D": {
             "value": "5/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬛, AP2"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41037,14 +40729,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41064,14 +40756,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41091,11 +40783,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Detonate*, EMP*, Silent"
@@ -41117,14 +40809,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Grav*"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41146,11 +40838,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, AP1, Grav*"
@@ -41166,11 +40858,11 @@
           "D": {
             "value": "-"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": "-"
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Each time this weapon is selected to make a shooting attack with, select one of the profiles below to use:"
@@ -41186,14 +40878,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Blast ⬤"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41208,14 +40900,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41233,14 +40925,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41255,14 +40947,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41280,11 +40972,11 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ▲"
@@ -41300,14 +40992,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41329,11 +41021,11 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Lethal 5+, No Cover, *Proximity"
@@ -41355,14 +41047,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41382,14 +41074,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41404,14 +41096,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Fusillade"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41423,14 +41115,14 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Rng ⬟, Torrent ⬤"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41449,11 +41141,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Ceaseless, Fusillade, Heavy"
@@ -41476,11 +41168,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Balanced, Lethal 5+"
@@ -41503,14 +41195,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, Indirect"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41530,14 +41222,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Ceaseless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41555,14 +41247,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41582,14 +41274,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41604,11 +41296,11 @@
           "D": {
             "value": "-"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": "-"
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Each time this weapon is selected to make a shooting attack with, select one of the profiles below to use:"
@@ -41624,14 +41316,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41646,14 +41338,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Silent"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41674,14 +41366,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Fusillade"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41696,11 +41388,11 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Indirect, Limited, No Cover"
@@ -41721,14 +41413,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41750,14 +41442,14 @@
           "D": {
             "value": "5/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬛, AP2"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41779,11 +41471,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, AP1, Indirect, Limited"
@@ -41804,14 +41496,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41826,14 +41518,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Silent"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41854,14 +41546,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41879,14 +41571,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41906,14 +41598,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41931,14 +41623,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41960,14 +41652,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬛"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -41988,14 +41680,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42010,14 +41702,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42032,14 +41724,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42054,11 +41746,11 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Siphon Life Force*"
@@ -42074,14 +41766,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42103,11 +41795,11 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "AP1, Cumbersome*"
@@ -42129,14 +41821,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42156,14 +41848,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42178,14 +41870,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42200,14 +41892,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42229,14 +41921,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, Balanced"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42257,14 +41949,14 @@
           "D": {
             "value": "4/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP2, Proximity*"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42286,14 +41978,14 @@
           "D": {
             "value": "6/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP2"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42315,11 +42007,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ⬤"
@@ -42335,14 +42027,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Blast ⬤"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42357,14 +42049,14 @@
           "D": {
             "value": "5/7"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42387,11 +42079,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Barrage, Unwieldy, Blast ⬤, Silent"
@@ -42413,11 +42105,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬛, Fusillade"
@@ -42433,11 +42125,11 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Relentless"
@@ -42453,14 +42145,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42479,11 +42171,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Fusillade, Heavy, Relentless"
@@ -42499,14 +42191,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42521,14 +42213,14 @@
           "D": {
             "value": "1/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42543,14 +42235,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42565,11 +42257,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬛, Lethal 5+"
@@ -42592,14 +42284,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42619,14 +42311,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "No Cover"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42648,11 +42340,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ▲, No Cover"
@@ -42668,14 +42360,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42690,14 +42382,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP2, Hot"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42709,11 +42401,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ⬤, Limited, Indirect"
@@ -42729,11 +42421,11 @@
           "D": {
             "value": "-"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": "-"
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Each time this weapon is selected to make a shooting attack with, select one of the profiles below to use:"
@@ -42749,14 +42441,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42771,14 +42463,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP2, Hot"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42793,14 +42485,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42815,14 +42507,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP2, Hot"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42837,14 +42529,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42859,14 +42551,14 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP2, Hot"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42881,11 +42573,11 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Limited, Blast ⬤, Indirect, Psyk-out*"
@@ -42901,14 +42593,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42923,14 +42615,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42948,14 +42640,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -42973,14 +42665,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43001,11 +42693,11 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ⬤"
@@ -43021,11 +42713,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Blast ⬤, Indirect, Limited"
@@ -43046,14 +42738,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43065,11 +42757,11 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, Torrent ▲"
@@ -43093,14 +42785,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Silent"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43122,11 +42814,11 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "AP1, *Detonate, Silent"
@@ -43146,11 +42838,11 @@
           "D": {
             "value": "5/6"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "AP1, Detonate*, Silent"
@@ -43172,14 +42864,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43201,14 +42893,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Silent"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43228,14 +42920,14 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43250,14 +42942,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43280,11 +42972,11 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Heavy, Silent, Balanced"
@@ -43300,14 +42992,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43328,14 +43020,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43357,14 +43049,14 @@
           "D": {
             "value": "1/1"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43379,14 +43071,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43406,14 +43098,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43434,11 +43126,11 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Fusillade, Heavy, Humbling Cruelty*"
@@ -43459,14 +43151,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43486,14 +43178,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43513,14 +43205,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43538,14 +43230,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 5
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43567,14 +43259,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43595,14 +43287,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Fusillade"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43620,14 +43312,14 @@
           "D": {
             "value": "2/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬛"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43645,14 +43337,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43672,14 +43364,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43700,11 +43392,11 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Lethal 5+, Rng ⬟"
@@ -43725,14 +43417,14 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Lethal 5+"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43747,14 +43439,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43775,14 +43467,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43803,14 +43495,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Lethal 5+"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43828,14 +43520,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Heavy, AP1"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43855,14 +43547,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43882,14 +43574,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Ceaseless"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43907,14 +43599,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Silent"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43936,14 +43628,14 @@
           "D": {
             "value": "0/0"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, No Cover"
           },
           "WS/BS": {
             "value": 6
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43965,14 +43657,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "AP1, Heavy"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -43993,14 +43685,14 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟, Balanced"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -44020,14 +43712,14 @@
           "D": {
             "value": "3/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "-"
           },
           "WS/BS": {
             "value": 3
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -44050,11 +43742,11 @@
           "D": {
             "value": "5/3"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "AP1, Heavy, Unwieldy"
@@ -44067,11 +43759,11 @@
           "D": {
             "value": "3/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Balanced, Blast ▲, Rng ⬟"
@@ -44092,14 +43784,14 @@
           "D": {
             "value": "4/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Relentless"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -44118,14 +43810,14 @@
           "D": {
             "value": "4/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 4
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rending, Splash 1"
@@ -44148,11 +43840,11 @@
           "D": {
             "value": "2/4"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬟, AP1, Torrent ⬤"
@@ -44168,11 +43860,11 @@
           "D": {
             "value": "2/2"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         },
         "text": "Rng ⬛, Torrent ⬤"
@@ -44188,14 +43880,14 @@
           "D": {
             "value": "3/5"
           },
-          "R": {
-            "value": "Ranged"
-          },
           "SR": {
             "value": "Rng ⬟"
           },
           "WS/BS": {
             "value": 2
+          },
+          "R": {
+            "value": "Ranged"
           }
         }
       },
@@ -45097,4 +44789,7 @@
       }
     }
   }
-}
+};
+
+
+console.log(rulebook)
