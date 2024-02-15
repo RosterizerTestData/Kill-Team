@@ -119,9 +119,7 @@
                   ]
                 ],
                 "value": [
-                  "{self}",
-                  "rules",
-                  "setQtyForAuto",
+                  "{this}",
                   "evals",
                   "2",
                   "result",
@@ -182,9 +180,7 @@
                 "equation": {
                   "operator": "T-O",
                   "value": [
-                    "{self}",
-                    "rules",
-                    "setQtyForAuto",
+                    "{this}",
                     "evals",
                     "1",
                     "result",
@@ -36205,9 +36201,7 @@
                   ]
                 ],
                 "value": [
-                  "{self}",
-                  "rules",
-                  "disallowOperatives",
+                  "{this}",
                   "evals",
                   "0",
                   "result",
